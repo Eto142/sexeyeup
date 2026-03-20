@@ -210,6 +210,9 @@
     </a>
 
     <div class="sidebar-footer">
+        <a href="{{ route('admin.change.password') }}" class="nav-link {{ request()->routeIs('admin.change.password') ? 'active' : '' }}" style="padding:.6rem 0;">
+            <i class="bi bi-key"></i> Change Password
+        </a>
         <form action="{{ route('admin.logout') }}" method="POST">
             @csrf
             <button type="submit"><i class="bi bi-box-arrow-left"></i> Logout</button>

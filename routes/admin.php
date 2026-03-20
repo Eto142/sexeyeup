@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\ManageUserController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SendEmailController;
@@ -39,6 +40,10 @@ Route::middleware(['web'])->prefix('admin')->name('admin.')->group(function () {
 
         // Flash Sales CRUD
         Route::resource('flash-sales', FlashSaleController::class)->names('flash-sales');
+
+        // Change Password
+        Route::get('/change-password', [AdminProfileController::class, 'showChangePassword'])->name('change.password');
+        Route::post('/change-password', [AdminProfileController::class, 'changePassword'])->name('change.password.post');
     });
 
 });
