@@ -111,7 +111,7 @@
 </section>
 
 <!-- Team -->
-<section class="py-5">
+{{-- <section class="py-5">
     <div class="container">
         <div class="text-center mb-5">
             <span class="section-tag">👋 Meet the Team</span>
@@ -138,7 +138,7 @@
             @endforeach
         </div>
     </div>
-</section>
+</section> --}}
 
 <!-- Values -->
 <section class="py-5" style="background:var(--bg-card2); border-top:1px solid var(--border-subtle); border-bottom:1px solid var(--border-subtle);">

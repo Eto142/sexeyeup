@@ -55,7 +55,7 @@
             <ul class="navbar-nav mx-auto gap-lg-3">
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
-                <li class="nav-item"><a class="nav-link" href="/deals">Deals</a></li>
+                {{-- <li class="nav-item"><a class="nav-link" href="/deals">Deals</a></li> --}}
                 <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
             </ul>
 
@@ -129,7 +129,7 @@
             <div class="col-6 col-md-2">
                 <div style="font-weight:700; color:var(--text-white); margin-bottom:14px; font-size:.88rem;">Info</div>
                 <a href="/about"  class="footer-link">About Us</a>
-                <a href="/deals"  class="footer-link">Deals</a>
+                {{-- <a href="/deals"  class="footer-link">Deals</a> --}}
                 {{-- <a href="#"       class="footer-link">Lab Results</a>
                 <a href="#"       class="footer-link">Blog</a> --}}
             </div>
