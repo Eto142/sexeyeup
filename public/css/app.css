@@ -524,7 +524,7 @@ body.light-mode .hero {
 .btn-close { filter: invert(1) sepia(1) saturate(3) hue-rotate(90deg); }
 
 .cart-back-btn {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 6px;
     background: rgba(90,173,63,.12);

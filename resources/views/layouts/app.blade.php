@@ -156,12 +156,12 @@
 
 <!-- ======================== CART OFFCANVAS ======================== -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="cartCanvas">
-    <div class="offcanvas-header">
+    <div class="offcanvas-header" style="justify-content:space-between; padding:12px 16px;">
         <button type="button" class="cart-back-btn" data-bs-dismiss="offcanvas" aria-label="Go back">
             <i class="bi bi-arrow-left"></i> Back
         </button>
-        <span class="offcanvas-title">🛒 Your Cart</span>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <span class="offcanvas-title" style="flex:1; text-align:center;">🛒 Your Cart</span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" style="flex-shrink:0;"></button>
     </div>
     <div class="offcanvas-body px-4" id="cartBody" style="overflow-y:auto; flex:1;">
         <div id="cartInfoBanner" style="display:none; background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.2); border-radius:10px; padding:12px 14px; margin-bottom:16px; font-size:.8rem; color:var(--text-muted-c); line-height:1.7;">
