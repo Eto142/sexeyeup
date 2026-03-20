@@ -130,15 +130,15 @@
                 <div style="font-weight:700; color:var(--text-white); margin-bottom:14px; font-size:.88rem;">Info</div>
                 <a href="/about"  class="footer-link">About Us</a>
                 <a href="/deals"  class="footer-link">Deals</a>
-                <a href="#"       class="footer-link">Lab Results</a>
-                <a href="#"       class="footer-link">Blog</a>
+                {{-- <a href="#"       class="footer-link">Lab Results</a>
+                <a href="#"       class="footer-link">Blog</a> --}}
             </div>
             <div class="col-md-4">
                 <div style="font-weight:700; color:var(--text-white); margin-bottom:14px; font-size:.88rem;">Contact</div>
                 <p style="font-size:.84rem; line-height:2;">
                     <i class="bi bi-envelope" style="color:var(--green-bright)"></i> support@sexeyeup.store<br>
-                    <i class="bi bi-telephone" style="color:var(--green-bright)"></i> +1 (800) 420-6969<br>
-                    <i class="bi bi-clock"     style="color:var(--green-bright)"></i> Mon–Fri 9AM – 9PM EST
+                    {{-- <i class="bi bi-telephone" style="color:var(--green-bright)"></i> +1 (800) 420-6969<br> --}}
+                    <i class="bi bi-clock"     style="color:var(--green-bright)"></i> 24/7 Customer Support
                 </p>
             </div>
         </div>
