@@ -3,10 +3,17 @@
 @section('page-title', 'Order Detail')
 
 @section('content')
-<div class="mb-4">
+<div class="mb-4 d-flex align-items-center gap-2">
     <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-outline-secondary">
         <i class="bi bi-arrow-left"></i> Back to Orders
     </a>
+    <form action="{{ route('admin.orders.destroy', $order) }}" method="POST" class="ms-auto" onsubmit="return confirm('Delete order {{ $order->reference }}? This cannot be undone.')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-sm btn-danger">
+            <i class="bi bi-trash3"></i> Delete Order
+        </button>
+    </form>
 </div>
 
 @if(session('success'))

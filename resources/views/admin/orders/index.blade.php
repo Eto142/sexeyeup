@@ -56,6 +56,11 @@
                     <td style="font-size:.8rem; color:#6b7280;">{{ $order->created_at->format('M j, Y g:ia') }}</td>
                     <td>
                         <a href="{{ route('admin.orders.show', $order) }}" class="btn btn-sm btn-outline-secondary">View</a>
+                        <form action="{{ route('admin.orders.destroy', $order) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete order {{ $order->reference }}? This cannot be undone.')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 @empty
