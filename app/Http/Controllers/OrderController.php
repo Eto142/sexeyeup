@@ -43,8 +43,12 @@ class OrderController extends Controller
             ]);
         }
 
-        Mail::to(config('mail.support_address', 'support@sexeyeup.store'))
-            ->send(new NewOrderMail($order));
+        try {
+            Mail::to(config('mail.from.address'))
+                ->send(new NewOrderMail($order));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('NewOrderMail failed: ' . $e->getMessage());
+        }
 
         return response()->json([
             'success'   => true,
