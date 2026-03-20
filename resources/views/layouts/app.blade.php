@@ -56,6 +56,7 @@
                 <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/shop">Shop</a></li>
                 {{-- <li class="nav-item"><a class="nav-link" href="/deals">Deals</a></li> --}}
+                <li class="nav-item"><a class="nav-link" href="/how-to-order">How to Order</a></li>
                 <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
             </ul>
 

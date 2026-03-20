@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [PageController::class, 'home']);
 Route::get('/shop', [PageController::class, 'shop']);
 Route::get('/deals', [PageController::class, 'deals']);
+Route::get('/how-to-order', [PageController::class, 'howToOrder']);
 Route::get('/about', [PageController::class, 'about']);
 
 Route::post('/orders', [OrderController::class, 'store']);

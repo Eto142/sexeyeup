@@ -37,6 +37,11 @@ class PageController extends Controller
         return view('pages.deals', compact('products'));
     }
 
+    public function howToOrder()
+    {
+        return view('pages.how-to-order');
+    }
+
     public function about()
     {
         return view('pages.about');
