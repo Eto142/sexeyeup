@@ -12,7 +12,7 @@
         /* Sidebar */
         #sidebar {
             width: 240px;
-            min-height: 100vh;
+            height: 100vh;
             background: #1a1d23;
             position: fixed;
             top: 0; left: 0;
@@ -20,7 +20,13 @@
             display: flex;
             flex-direction: column;
             transition: transform .25s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
+        #sidebar::-webkit-scrollbar { width: 4px; }
+        #sidebar::-webkit-scrollbar-track { background: transparent; }
+        #sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 4px; }
+        #sidebar::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.3); }
         #sidebar .brand {
             padding: 1.4rem 1.5rem;
             border-bottom: 1px solid rgba(255,255,255,.08);
@@ -157,6 +163,16 @@
         /* Badges */
         .badge-status { font-size: .7rem; padding: .3em .65em; border-radius: 999px; }
 
+        /* Sidebar overlay (mobile) */
+        #sidebarOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.45);
+            z-index: 999;
+        }
+        #sidebarOverlay.show { display: block; }
+
         /* Mobile sidebar toggle */
         #sidebarToggle { display: none; }
         @media (max-width: 991px) {
@@ -220,9 +236,12 @@
     </div>
 </nav>
 
+<!-- Sidebar overlay -->
+<div id="sidebarOverlay"></div>
+
 <!-- Topbar -->
 <div id="topbar">
-    <button id="sidebarToggle" class="btn btn-sm btn-outline-secondary me-1" onclick="document.getElementById('sidebar').classList.toggle('open')">
+    <button id="sidebarToggle" class="btn btn-sm btn-outline-secondary me-1" id="sidebarToggleBtn">
         <i class="bi bi-list"></i>
     </button>
     <h1 class="page-title">@yield('page-title', 'Dashboard')</h1>
@@ -257,6 +276,31 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const sidebar  = document.getElementById('sidebar');
+    const overlay  = document.getElementById('sidebarOverlay');
+    const toggleBtn = document.getElementById('sidebarToggle');
+
+    function openSidebar() {
+        sidebar.classList.add('open');
+        overlay.classList.add('show');
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('show');
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            sidebar.classList.contains('open') ? closeSidebar() : openSidebar();
+        });
+    }
+
+    // Close on overlay tap/click
+    overlay.addEventListener('click', closeSidebar);
+    overlay.addEventListener('touchstart', closeSidebar, { passive: true });
+</script>
 @stack('scripts')
 </body>
 </html>
