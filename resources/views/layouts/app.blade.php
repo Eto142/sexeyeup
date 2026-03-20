@@ -42,6 +42,11 @@
             <span class="leaf-icon">🌿</span> SexEyeUp
         </a>
 
+        <!-- Theme toggle visible on mobile (outside collapse) -->
+        <button class="theme-toggle d-lg-none" onclick="toggleTheme()" title="Toggle theme">
+            <i class="theme-icon-el bi bi-sun-fill"></i>
+        </button>
+
         <button class="navbar-toggler border-0 p-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false">
             <span style="color:var(--green-bright); font-size:1.5rem;"><i class="bi bi-list"></i></span>
         </button>
@@ -62,9 +67,9 @@
                            onkeydown="if(event.key==='Enter'){ window.location='/shop?q='+encodeURIComponent(this.value); }">
                 </div>
 
-                <!-- Theme toggle -->
-                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">
-                    <i id="themeIcon" class="bi bi-sun-fill"></i>
+                <!-- Theme toggle (desktop, inside collapsed menu) -->
+                <button class="theme-toggle d-none d-lg-flex" onclick="toggleTheme()" title="Toggle theme">
+                    <i class="theme-icon-el bi bi-sun-fill"></i>
                 </button>
 
                 <!-- Cart -->

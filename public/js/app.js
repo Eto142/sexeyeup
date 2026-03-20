@@ -18,8 +18,9 @@ function applyTheme(mode) {
     document.body.classList.toggle('light-mode', mode === 'light');
     localStorage.setItem('seu_theme', mode);
 
-    const icon = document.getElementById('themeIcon');
-    if (icon) icon.className = mode === 'light' ? 'bi bi-moon-stars-fill' : 'bi bi-sun-fill';
+    document.querySelectorAll('.theme-icon-el').forEach(function(icon) {
+        icon.className = mode === 'light' ? 'bi bi-moon-stars-fill theme-icon-el' : 'bi bi-sun-fill theme-icon-el';
+    });
 }
 
 function toggleTheme() {
