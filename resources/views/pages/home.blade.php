@@ -9,7 +9,7 @@
     <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
             <div>
-                <span class="hero-badge">&#127807; Premium Quality &mdash; Lab Tested</span>
+                <span class="hero-badge">&#127807; Premium Quality</span>
                 <h1 class="hero-compact-title">The <span>Purest</span> Green You'll Find.</h1>
             </div>
             <div class="d-flex flex-wrap gap-2">
