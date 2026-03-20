@@ -5,10 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    private function uploadToCloudinary(\Illuminate\Http\UploadedFile $file): array
+    {
+        $result = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::getFacadeRoot()
+            ->uploadApi()
+            ->upload($file->getRealPath(), ['folder' => 'seu_products']);
+
+        return [
+            'url'       => $result['secure_url'],
+            'public_id' => $result['public_id'],
+        ];
+    }
+
     public function index()
     {
         $products = Product::latest()->paginate(15);
@@ -36,11 +47,13 @@ class ProductController extends Controller
             'featured'    => 'nullable|boolean',
             'active'      => 'nullable|boolean',
             'description' => 'nullable|string',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $uploaded = $this->uploadToCloudinary($request->file('image'));
+            $data['image']                = $uploaded['url'];
+            $data['cloudinary_public_id'] = $uploaded['public_id'];
         }
 
         $data['is_new']   = $request->boolean('is_new');
@@ -74,15 +87,17 @@ class ProductController extends Controller
             'featured'    => 'nullable|boolean',
             'active'      => 'nullable|boolean',
             'description' => 'nullable|string',
-            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
 
         if ($request->hasFile('image')) {
-            // Delete old image
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
+            if ($product->cloudinary_public_id) {
+                \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::getFacadeRoot()
+                    ->uploadApi()->destroy($product->cloudinary_public_id);
             }
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $uploaded = $this->uploadToCloudinary($request->file('image'));
+            $data['image']                = $uploaded['url'];
+            $data['cloudinary_public_id'] = $uploaded['public_id'];
         }
 
         $data['is_new']   = $request->boolean('is_new');
@@ -97,8 +112,9 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        if ($product->image) {
-            Storage::disk('public')->delete($product->image);
+        if ($product->cloudinary_public_id) {
+            \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::getFacadeRoot()
+                ->uploadApi()->destroy($product->cloudinary_public_id);
         }
         $product->delete();
 

@@ -106,7 +106,7 @@
                    class="form-control @error('image') is-invalid @enderror"
                    accept="image/*"
                    onchange="previewImage(this)">
-            <div class="form-text mt-1">JPEG, PNG, WebP — max 2MB</div>
+            <div class="form-text mt-1">JPEG, PNG, WebP — uploaded to Cloudinary</div>
             @error('image')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
         </div>
 

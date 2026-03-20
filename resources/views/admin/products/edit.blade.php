@@ -101,7 +101,7 @@
 
             @if($product->image)
             <div class="mb-3">
-                <img src="{{ asset('storage/' . $product->image) }}"
+                <img src="{{ $product->image }}"
                      alt="{{ $product->name }}" id="imgPreview"
                      style="width:100%;border-radius:10px;object-fit:cover;max-height:200px;">
             </div>
@@ -116,7 +116,7 @@
                    class="form-control @error('image') is-invalid @enderror"
                    accept="image/*"
                    onchange="previewImage(this)">
-            <div class="form-text mt-1">Upload new to replace current. JPEG, PNG, WebP — max 2MB</div>
+            <div class="form-text mt-1">Upload new to replace current. Uploaded to Cloudinary.</div>
             @error('image')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
         </div>
 
