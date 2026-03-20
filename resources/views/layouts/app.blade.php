@@ -157,13 +157,18 @@
 <!-- ======================== CART OFFCANVAS ======================== -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="cartCanvas">
     <div class="offcanvas-header">
-        <button type="button" class="cart-back-btn d-lg-none" data-bs-dismiss="offcanvas" aria-label="Go back">
+        <button type="button" class="cart-back-btn" data-bs-dismiss="offcanvas" aria-label="Go back">
             <i class="bi bi-arrow-left"></i> Back
         </button>
         <span class="offcanvas-title">🛒 Your Cart</span>
-        <button type="button" class="btn-close d-none d-lg-block" data-bs-dismiss="offcanvas"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
-    <div class="offcanvas-body px-4" id="cartBody" style="overflow-y:auto; flex:1;"></div>
+    <div class="offcanvas-body px-4" id="cartBody" style="overflow-y:auto; flex:1;">
+        <div id="cartInfoBanner" style="display:none; background:rgba(74,222,128,.08); border:1px solid rgba(74,222,128,.2); border-radius:10px; padding:12px 14px; margin-bottom:16px; font-size:.8rem; color:var(--text-muted-c); line-height:1.7;">
+            <strong style="color:var(--green-bright); font-size:.85rem;">🌿 How it works</strong><br>
+            Review your items below, then tap <em>Secure Checkout</em>. Leave us your <strong>email</strong> or <strong>phone number</strong> — whichever you prefer — and we'll confirm your order &amp; arrange discreet delivery straight to you.
+        </div>
+    </div>
     <div class="cart-footer" id="cartFooter" style="display:none;">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="cart-total-label">Subtotal</span>
@@ -197,15 +202,17 @@
 
                 <!-- Contact details -->
                 <p class="checkout-section-label">Your Details</p>
+                <p style="font-size:.8rem; color:var(--text-muted-c); background:rgba(74,222,128,.07); border:1px solid rgba(74,222,128,.18); border-radius:8px; padding:10px 13px; line-height:1.7; margin-bottom:16px;">
+                    📋 Provide <strong>at least one</strong> — your email or phone number. We'll use it to confirm your order and arrange discreet delivery.
+                </p>
                 <div class="mb-3">
-                    <label class="checkout-label" for="checkoutEmail">Email address <span style="color:#e05252">*</span></label>
+                    <label class="checkout-label" for="checkoutEmail">Email address <span style="color:var(--text-muted-c); font-weight:400;">(optional)</span></label>
                     <input type="email" id="checkoutEmail" class="checkout-input" placeholder="you@example.com" autocomplete="email">
                 </div>
                 <div class="mb-3">
-                    <label class="checkout-label" for="checkoutPhone">Phone number <span style="color:#e05252">*</span></label>
+                    <label class="checkout-label" for="checkoutPhone">Phone number <span style="color:var(--text-muted-c); font-weight:400;">(optional)</span></label>
                     <input type="tel" id="checkoutPhone" class="checkout-input" placeholder="+234 800 000 0000" autocomplete="tel">
                 </div>
-                <p style="font-size:.75rem; color:var(--text-muted-c); margin-top:-6px;">We'll use these to confirm your order and arrange delivery.</p>
             </div>
             <div class="modal-footer checkout-modal-footer">
                 <button class="btn-checkout w-100" id="placeOrderBtn" onclick="submitOrder()">

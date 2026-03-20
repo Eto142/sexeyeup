@@ -173,8 +173,8 @@ function renderCheckoutSummary() {
 function submitOrder() {
     const email = document.getElementById('checkoutEmail').value.trim();
     const phone = document.getElementById('checkoutPhone').value.trim();
-    if (!email || !phone) {
-        showToast('⚠️ Please enter your email and phone number.');
+    if (!email && !phone) {
+        showToast('⚠️ Please enter at least your email or phone number.');
         return;
     }
     const btn = document.getElementById('placeOrderBtn');
@@ -201,7 +201,7 @@ function submitOrder() {
             document.getElementById('checkoutPhone').value = '';
             showToast(`✅ Order <strong>${data.reference}</strong> placed! We’ll be in touch shortly.`);
         } else {
-            showToast('❌ Something went wrong. Please try again.');
+            showToast('❌ ' + (data.message || 'Something went wrong. Please try again.'));
         }
     })
     .catch(() => showToast('❌ Connection error. Please try again.'))
@@ -249,9 +249,13 @@ function renderCart() {
                 <p style="font-size:.82rem">Add some green to get started 🌿</p>
             </div>`;
         if (footer) footer.style.display = 'none';
+        const banner = document.getElementById('cartInfoBanner');
+        if (banner) banner.style.display = 'none';
         return;
     }
     if (footer) footer.style.display = 'block';
+    const banner = document.getElementById('cartInfoBanner');
+    if (banner) banner.style.display = 'block';
 
     body.innerHTML = cart.map(item => `
         <div class="cart-item">

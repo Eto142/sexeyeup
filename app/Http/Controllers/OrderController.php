@@ -12,8 +12,8 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'email'           => 'required|email|max:255',
-            'phone'           => 'required|string|max:30',
+            'email'           => 'nullable|email|max:255',
+            'phone'           => 'nullable|string|max:30',
             'items'           => 'required|array|min:1',
             'items.*.id'      => 'required|integer',
             'items.*.name'    => 'required|string|max:255',
@@ -21,6 +21,10 @@ class OrderController extends Controller
             'items.*.qty'     => 'required|integer|min:1|max:1000',
             'items.*.price'   => 'required|numeric|min:0',
         ]);
+
+        if (empty(trim($validated['email'] ?? '')) && empty(trim($validated['phone'] ?? ''))) {
+            return response()->json(['success' => false, 'message' => 'Please provide an email or phone number.'], 422);
+        }
 
         $total = collect($validated['items'])
             ->sum(fn($i) => $i['price'] * $i['qty']);
