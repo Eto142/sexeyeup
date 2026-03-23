@@ -14,7 +14,7 @@
             </div>
             <div class="d-flex flex-wrap gap-2">
                 <a href="/shop" class="btn-hero">Browse All</a>
-                <a href="/deals" class="btn-hero-outline">Today's Deals</a>
+                <a href="/shop" class="btn-hero-outline">Today's Deals</a>
             </div>
         </div>
     </div>
