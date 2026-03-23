@@ -898,27 +898,43 @@ footer {
 }
 
 /* ================================================================
-   UNIT TOGGLE (per-product gram / ounce selector)
+   UNIT SELECT (per-product gram / ounce dropdown)
    ================================================================ */
-.unit-toggle {
-    display: flex; gap: 6px; margin-bottom: 10px;
+.price-unit-row {
+    display: flex; gap: 10px;
+    align-items: center; flex-wrap: wrap;
+    margin-bottom: 10px;
 }
-.unit-btn {
-    background: transparent;
+.unit-select-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+.unit-select {
+    background: var(--bg-card, #111);
     border: 1px solid var(--border-main);
     color: var(--text-muted-c);
-    padding: 5px 14px; border-radius: 50px;
+    padding: 5px 28px 5px 12px;
+    border-radius: 50px;
     font-size: .78rem; font-weight: 600;
-    cursor: pointer; transition: all .2s;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    transition: border-color .2s, color .2s;
 }
-.unit-btn.active, .unit-btn:hover {
-    background: var(--green-main);
+.unit-select:focus {
+    outline: none;
     border-color: var(--green-light);
     color: #fff;
 }
-.price-unit-row {
-    display: flex; gap: 6px;
-    align-items: baseline; flex-wrap: wrap;
-    margin-bottom: 8px;
+.unit-select option {
+    background: #1a2b1a;
+    color: #fff;
 }
-.price-unit-label { font-size: .72rem; color: var(--text-muted-c); }
+.unit-chevron {
+    position: absolute;
+    right: 10px;
+    pointer-events: none;
+    font-size: .68rem;
+    color: var(--text-muted-c);
+}

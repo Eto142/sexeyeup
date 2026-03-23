@@ -139,14 +139,14 @@ function buildCard(p) {
                     <span class="star-count">(${p.reviews})</span>
                 </div>
                 <div class="price-unit-row">
-                    <span class="product-price">${formatNaira(p.priceGram)}</span>
-                    <span class="price-unit-label">/g</span>
-                    <span class="product-price">${formatNaira(p.priceOunce)}</span>
-                    <span class="price-unit-label">/oz</span>
-                </div>
-                <div class="unit-toggle">
-                    <button class="unit-btn active" onclick="selectUnit(${p.id},'gram',this)">Gram</button>
-                    <button class="unit-btn" onclick="selectUnit(${p.id},'ounce',this)">Ounce</button>
+                    <span class="product-price" id="cardPrice_${p.id}">${formatNaira(p.priceGram)}</span>
+                    <div class="unit-select-wrap">
+                        <select class="unit-select" id="unitSelect_${p.id}" onchange="selectUnit(${p.id}, this.value)">
+                            <option value="gram">Gram</option>
+                            <option value="ounce">Ounce</option>
+                        </select>
+                        <i class="bi bi-chevron-down unit-chevron"></i>
+                    </div>
                 </div>
                 <div class="card-qty-row">
                     <button class="card-qty-btn" onclick="changeCardQty(${p.id},-1)"><i class="bi bi-dash"></i></button>

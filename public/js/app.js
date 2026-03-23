@@ -36,11 +36,13 @@ function formatNaira(amount) {
 /* ── Unit Selection ────────────────────────────────────────── */
 const selectedUnits = {};
 
-function selectUnit(id, unit, btn) {
+function selectUnit(id, unit) {
     selectedUnits[id] = unit;
-    const card = btn.closest('.product-card');
-    if (card) card.querySelectorAll('.unit-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+    const priceEl = document.getElementById('cardPrice_' + id);
+    if (priceEl) {
+        const product = PRODUCTS.find(p => p.id === id);
+        if (product) priceEl.textContent = formatNaira(unit === 'ounce' ? product.priceOunce : product.priceGram);
+    }
     updateCardTotal(id);
 }
 
