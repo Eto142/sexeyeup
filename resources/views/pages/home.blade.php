@@ -140,12 +140,15 @@ function buildCard(p) {
                 </div>
                 <div class="price-unit-row">
                     <span class="product-price" id="cardPrice_${p.id}">${formatNaira(p.priceGram)}</span>
-                    <div class="unit-select-wrap">
-                        <select class="unit-select" id="unitSelect_${p.id}" onchange="selectUnit(${p.id}, this.value)">
-                            <option value="gram">Gram</option>
-                            <option value="ounce">Ounce</option>
-                        </select>
-                        <i class="bi bi-chevron-down unit-chevron"></i>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="price-per-label">per</span>
+                        <div class="unit-select-wrap">
+                            <select class="unit-select" id="unitSelect_${p.id}" onchange="selectUnit(${p.id}, this.value)">
+                                <option value="gram">Gram</option>
+                                <option value="ounce">Ounce</option>
+                            </select>
+                            <i class="bi bi-chevron-down unit-chevron"></i>
+                        </div>
                     </div>
                 </div>
                 <div class="card-qty-row">
