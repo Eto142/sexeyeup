@@ -4,13 +4,29 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::latest()->with('items')->paginate(10);
-        return view('admin.orders.index', compact('orders'));
+        $date = $request->input('date'); // e.g. "2024-01-15"
+
+        $query = Order::latest()->with('items');
+
+        if ($date) {
+            $query->whereDate('created_at', $date);
+        }
+
+        $orders = $query->paginate(10)->withQueryString();
+
+        // All distinct dates that have at least one order, newest first
+        $orderDates = Order::selectRaw('DATE(created_at) as order_date')
+            ->groupBy('order_date')
+            ->orderByDesc('order_date')
+            ->pluck('order_date');
+
+        return view('admin.orders.index', compact('orders', 'orderDates', 'date'));
     }
 
     public function show(Order $order)

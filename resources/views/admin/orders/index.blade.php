@@ -3,12 +3,43 @@
 @section('page-title', 'Orders')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <div>
         <h4 class="mb-0 fw-700">All Orders</h4>
-        <p class="text-muted mb-0" style="font-size:.82rem;">{{ $orders->total() }} orders total</p>
+        <p class="text-muted mb-0" style="font-size:.82rem;">
+            {{ $orders->total() }} order{{ $orders->total() == 1 ? '' : 's' }}
+            @if($date) on <strong>{{ \Carbon\Carbon::parse($date)->format('M j, Y') }}</strong> @endif
+        </p>
     </div>
+    @if($date)
+        <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-outline-secondary">&#x2715; Clear filter</a>
+    @endif
 </div>
+
+{{-- ── Date filter bar ── --}}
+@if($orderDates->isNotEmpty())
+<div class="table-card mb-4 p-3">
+    <form method="GET" action="{{ route('admin.orders.index') }}" class="d-flex align-items-center flex-wrap gap-2">
+        <label class="fw-600 mb-0" style="font-size:.88rem; white-space:nowrap;">&#128197; Filter by date:</label>
+
+        <select name="date" class="form-select form-select-sm" style="max-width:210px;"
+                onchange="this.form.submit()">
+            <option value="">— All dates —</option>
+            @foreach($orderDates as $d)
+                <option value="{{ $d }}" {{ $date === $d ? 'selected' : '' }}>
+                    {{ \Carbon\Carbon::parse($d)->format('D, M j Y') }}
+                    ({{ \App\Models\Order::whereDate('created_at', $d)->count() }})
+                </option>
+            @endforeach
+        </select>
+
+        {{-- Manual date input as alternative --}}
+        <input type="date" name="date" class="form-control form-control-sm" style="max-width:160px;"
+               value="{{ $date ?? '' }}">
+        <button class="btn btn-sm btn-primary" type="submit">Go</button>
+    </form>
+</div>
+@endif
 
 @if(session('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
