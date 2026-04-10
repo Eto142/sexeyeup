@@ -70,8 +70,10 @@
     <div class="col-lg-4">
         <div class="table-card mb-4 p-3">
             <p class="fw-700 mb-3" style="font-size:.82rem; text-transform:uppercase; letter-spacing:.05em; color:#6b7280;">Customer</p>
-            <p class="mb-1" style="font-size:.88rem;"><i class="bi bi-envelope me-2 text-success"></i>{{ $order->customer_email }}</p>
             <p class="mb-1" style="font-size:.88rem;"><i class="bi bi-telephone me-2 text-success"></i>{{ $order->customer_phone }}</p>
+            @if($order->customer_phone2)
+            <p class="mb-1" style="font-size:.88rem;"><i class="bi bi-telephone-fill me-2 text-success"></i>{{ $order->customer_phone2 }}</p>
+            @endif
             <p class="mb-0" style="font-size:.82rem; color:#6b7280;"><i class="bi bi-clock me-2"></i>{{ $order->created_at->format('M j, Y — g:ia') }}</p>
         </div>
 

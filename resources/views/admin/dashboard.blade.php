@@ -70,7 +70,6 @@
             <thead>
                 <tr>
                     <th>Reference</th>
-                    <th>Customer</th>
                     <th>Phone</th>
                     <th>Total</th>
                     <th>Status</th>
@@ -86,7 +85,6 @@
                 @endphp
                 <tr>
                     <td class="fw-600">{{ $order->reference }}</td>
-                    <td style="max-width:150px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ $order->customer_email }}</td>
                     <td>{{ $order->customer_phone }}</td>
                     <td class="fw-700">₦{{ number_format($order->total, 2) }}</td>
                     <td><span class="badge bg-{{ $color }} badge-status text-capitalize">{{ $order->status }}</span></td>

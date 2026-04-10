@@ -173,10 +173,10 @@ function renderCheckoutSummary() {
 }
 
 function submitOrder() {
-    const email = document.getElementById('checkoutEmail').value.trim();
-    const phone = document.getElementById('checkoutPhone').value.trim();
-    if (!email && !phone) {
-        showToast('⚠️ Please enter at least your email or phone number.');
+    const phone  = document.getElementById('checkoutPhone').value.trim();
+    const phone2 = document.getElementById('checkoutPhone2').value.trim();
+    if (!phone) {
+        showToast('⚠️ Please enter your phone number.');
         return;
     }
     const btn = document.getElementById('placeOrderBtn');
@@ -189,7 +189,7 @@ function submitOrder() {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
         },
-        body: JSON.stringify({ email, phone, items: cart }),
+        body: JSON.stringify({ phone, phone2, items: cart }),
     })
     .then(r => r.json())
     .then(data => {
@@ -199,8 +199,8 @@ function submitOrder() {
             updateCartUI();
             const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
             if (modal) modal.hide();
-            document.getElementById('checkoutEmail').value = '';
             document.getElementById('checkoutPhone').value = '';
+            document.getElementById('checkoutPhone2').value = '';
             showToast(`✅ Order <strong>${data.reference}</strong> placed! We’ll be in touch shortly.`);
         } else {
             showToast('❌ ' + (data.message || 'Something went wrong. Please try again.'));

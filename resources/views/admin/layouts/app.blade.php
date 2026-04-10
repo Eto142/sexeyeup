@@ -225,6 +225,14 @@
         <i class="bi bi-envelope"></i> Send Email
     </a>
 
+    <div class="nav-section">Settings</div>
+    <a href="{{ route('admin.site-settings') }}" class="nav-link {{ request()->routeIs('admin.site-settings') ? 'active' : '' }}">
+        <i class="bi bi-shield-lock"></i> Site Passcode
+    </a>
+    <a href="{{ route('admin.visitors') }}" class="nav-link {{ request()->routeIs('admin.visitors') ? 'active' : '' }}">
+        <i class="bi bi-people"></i> Visitors
+    </a>
+
     <div class="sidebar-footer">
         <a href="{{ route('admin.change.password') }}" class="nav-link {{ request()->routeIs('admin.change.password') ? 'active' : '' }}" style="padding:.6rem 0;">
             <i class="bi bi-key"></i> Change Password

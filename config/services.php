@@ -28,6 +28,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'callmebot' => [
+        'phone'   => env('WHATSAPP_PHONE'),    // your number in international format, no + (e.g. 2348012345678)
+        'api_key' => env('WHATSAPP_API_KEY'),  // API key from CallMeBot
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

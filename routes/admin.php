@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SendEmailController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\FlashSaleController;
+use App\Http\Controllers\Admin\SiteSettingsController;
+use App\Http\Controllers\Admin\VisitorController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['web'])->prefix('admin')->name('admin.')->group(function () {
@@ -45,6 +47,13 @@ Route::middleware(['web'])->prefix('admin')->name('admin.')->group(function () {
         // Change Password
         Route::get('/change-password', [AdminProfileController::class, 'showChangePassword'])->name('change.password');
         Route::post('/change-password', [AdminProfileController::class, 'changePassword'])->name('change.password.post');
+
+        // Site Settings (passcode)
+        Route::get('/site-settings', [SiteSettingsController::class, 'showPasscode'])->name('site-settings');
+        Route::patch('/site-settings/passcode', [SiteSettingsController::class, 'updatePasscode'])->name('site-settings.passcode');
+
+        // Visitors
+        Route::get('/visitors', [VisitorController::class, 'index'])->name('visitors');
     });
 
 });

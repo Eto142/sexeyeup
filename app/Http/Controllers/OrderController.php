@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\NewOrderMail;
 use App\Models\Order;
+use App\Services\WhatsAppService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -12,8 +13,8 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'email'           => 'nullable|email|max:255',
-            'phone'           => 'nullable|string|max:30',
+            'phone'           => 'required|string|max:30',
+            'phone2'          => 'nullable|string|max:30',
             'items'           => 'required|array|min:1',
             'items.*.id'      => 'required|integer',
             'items.*.name'    => 'required|string|max:255',
@@ -22,8 +23,8 @@ class OrderController extends Controller
             'items.*.price'   => 'required|numeric|min:0',
         ]);
 
-        if (empty(trim($validated['email'] ?? '')) && empty(trim($validated['phone'] ?? ''))) {
-            return response()->json(['success' => false, 'message' => 'Please provide an email or phone number.'], 422);
+        if (empty(trim($validated['phone']))) {
+            return response()->json(['success' => false, 'message' => 'Please provide a phone number.'], 422);
         }
 
         $total = collect($validated['items'])
@@ -31,8 +32,8 @@ class OrderController extends Controller
 
         $order = Order::create([
             'reference'       => Order::generateReference(),
-            'customer_email'  => $validated['email'],
             'customer_phone'  => $validated['phone'],
+            'customer_phone2' => $validated['phone2'] ?? null,
             'total'           => $total,
             'status'          => 'pending',
         ]);
@@ -52,6 +53,13 @@ class OrderController extends Controller
                 ->send(new NewOrderMail($order));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('NewOrderMail failed: ' . $e->getMessage());
+        }
+
+        try {
+            $order->load('items');
+            (new WhatsAppService())->notifyNewOrder($order);
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('WhatsApp notification failed: ' . $e->getMessage());
         }
 
         return response()->json([

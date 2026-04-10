@@ -54,8 +54,8 @@
             <thead>
                 <tr>
                     <th>Reference</th>
-                    <th>Customer</th>
                     <th>Phone</th>
+                    <th>Phone 2</th>
                     <th>Items</th>
                     <th>Total</th>
                     <th>Status</th>
@@ -67,8 +67,8 @@
                 @forelse($orders as $order)
                 <tr>
                     <td><span class="fw-600 text-dark">{{ $order->reference }}</span></td>
-                    <td style="max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ $order->customer_email }}</td>
                     <td>{{ $order->customer_phone }}</td>
+                    <td>{{ $order->customer_phone2 ?? '—' }}</td>
                     <td>{{ $order->items->count() }}</td>
                     <td class="fw-700">₦{{ number_format($order->total, 2) }}</td>
                     <td>
