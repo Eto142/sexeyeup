@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <!-- Cannabis / herb leaf -->
+  <g fill="#a2f563">
+    <!-- center stem -->
+    <rect x="30.5" y="32" width="3" height="22" rx="1.5"/>
+
+    <!-- center top leaf -->
+    <ellipse cx="32" cy="20" rx="7" ry="14" transform="rotate(0 32 20)"/>
+
+    <!-- upper left leaf -->
+    <ellipse cx="32" cy="22" rx="6" ry="13" transform="rotate(-35 32 22)"/>
+
+    <!-- upper right leaf -->
+    <ellipse cx="32" cy="22" rx="6" ry="13" transform="rotate(35 32 22)"/>
+
+    <!-- lower left leaf -->
+    <ellipse cx="32" cy="28" rx="5" ry="11" transform="rotate(-60 32 28)"/>
+
+    <!-- lower right leaf -->
+    <ellipse cx="32" cy="28" rx="5" ry="11" transform="rotate(60 32 28)"/>
+
+    <!-- far left leaf -->
+    <ellipse cx="32" cy="32" rx="4" ry="9" transform="rotate(-80 32 32)"/>
+
+    <!-- far right leaf -->
+    <ellipse cx="32" cy="32" rx="4" ry="9" transform="rotate(80 32 32)"/>
+  </g>
+
+  <!-- dark vein overlay for depth -->
+  <g stroke="#0d1f0d" stroke-width="0.8" stroke-linecap="round" opacity="0.3">
+    <line x1="32" y1="34" x2="32" y2="10"/>
+    <line x1="32" y1="26" x2="22" y2="18"/>
+    <line x1="32" y1="26" x2="42" y2="18"/>
+    <line x1="32" y1="30" x2="18" y2="26"/>
+    <line x1="32" y1="30" x2="46" y2="26"/>
+  </g>
+</svg>

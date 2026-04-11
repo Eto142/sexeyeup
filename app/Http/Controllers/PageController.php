@@ -46,4 +46,9 @@ class PageController extends Controller
     {
         return view('pages.about');
     }
+
+    public function qrCode()
+    {
+        return view('pages.qr-code');
+    }
 }

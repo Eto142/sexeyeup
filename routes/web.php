@@ -22,6 +22,7 @@ Route::middleware(PasscodeMiddleware::class)->group(function () {
     Route::get('/deals', [PageController::class, 'deals']);
     Route::get('/how-to-order', [PageController::class, 'howToOrder']);
     Route::get('/about', [PageController::class, 'about']);
+    Route::get('/qr-code', [PageController::class, 'qrCode']);
 
     Route::post('/orders', [OrderController::class, 'store']);
 });
