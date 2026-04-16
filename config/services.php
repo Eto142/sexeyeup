@@ -28,9 +28,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'callmebot' => [
-        'phone'   => env('WHATSAPP_PHONE'),    // your number in international format, no + (e.g. 2348012345678)
-        'api_key' => env('WHATSAPP_API_KEY'),  // API key from CallMeBot
+    'waapi' => [
+        'instance_id' => env('WAAPI_INSTANCE_ID'),   // numeric instance ID from waapi.app dashboard
+        'api_token'   => env('WAAPI_API_TOKEN'),     // Bearer token from waapi.app dashboard
+        'chat_id'     => env('WAAPI_CHAT_ID'),       // your WhatsApp number e.g. 2348012345678@c.us
     ],
 
     'slack' => [
