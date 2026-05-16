@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     private function uploadToCloudinary(\Illuminate\Http\UploadedFile $file): array
     {
-        $result = \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::getFacadeRoot()
+        $result = cloudinary()
             ->uploadApi()
             ->upload($file->getRealPath(), ['folder' => 'seu_products']);
 
