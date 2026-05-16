@@ -10,12 +10,36 @@ class ProductController extends Controller
 {
     private function uploadToCloudinary(\Illuminate\Http\UploadedFile $file): array
     {
-        $cloudinary = new \Cloudinary\Cloudinary(config('filesystems.disks.cloudinary.url'));
-        $result = $cloudinary->uploadApi()->upload($file->getRealPath(), ['folder' => 'seu_products']);
+        $cloudName = config('filesystems.disks.cloudinary.cloud');
+        $apiKey    = config('filesystems.disks.cloudinary.key');
+        $apiSecret = config('filesystems.disks.cloudinary.secret');
+        $timestamp = time();
+
+        $params    = ['folder' => 'seu_products', 'timestamp' => $timestamp];
+        ksort($params);
+        $sigString = implode('&', array_map(
+            fn ($k, $v) => "{$k}={$v}",
+            array_keys($params),
+            array_values($params)
+        )) . $apiSecret;
+        $signature = sha1($sigString);
+
+        $response = \Illuminate\Support\Facades\Http::attach(
+            'file',
+            file_get_contents($file->getRealPath()),
+            $file->getClientOriginalName()
+        )->post("https://api.cloudinary.com/v1_1/{$cloudName}/image/upload", [
+            'api_key'   => $apiKey,
+            'timestamp' => $timestamp,
+            'signature' => $signature,
+            'folder'    => 'seu_products',
+        ]);
+
+        $data = $response->json();
 
         return [
-            'url'       => $result['secure_url'],
-            'public_id' => $result['public_id'],
+            'url'       => $data['secure_url'],
+            'public_id' => $data['public_id'],
         ];
     }
 
