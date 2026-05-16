@@ -157,6 +157,9 @@
 <script>
 const BAYELSA_PRODUCTS = @json($bayelsaProducts);
 const BENIN_PRODUCTS   = @json($beninProducts);
+// Merge for shared cart/unit helpers in app.js which look up by PRODUCTS
+const _allHome = [...BAYELSA_PRODUCTS, ...BENIN_PRODUCTS];
+PRODUCTS.push(..._allHome.filter(p => !PRODUCTS.some(e => e.id === p.id)));
 
 function buildCard(p) {
     const inCart   = cart.some(c => c.id === p.id);
