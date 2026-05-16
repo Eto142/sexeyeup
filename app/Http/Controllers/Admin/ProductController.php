@@ -10,9 +10,8 @@ class ProductController extends Controller
 {
     private function uploadToCloudinary(\Illuminate\Http\UploadedFile $file): array
     {
-        $result = cloudinary()
-            ->uploadApi()
-            ->upload($file->getRealPath(), ['folder' => 'seu_products']);
+        $cloudinary = new \Cloudinary\Cloudinary(config('filesystems.disks.cloudinary.url'));
+        $result = $cloudinary->uploadApi()->upload($file->getRealPath(), ['folder' => 'seu_products']);
 
         return [
             'url'       => $result['secure_url'],
