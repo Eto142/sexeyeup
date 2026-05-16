@@ -4,6 +4,25 @@
 
 @section('content')
 
+<!-- ======================== LOCATION PICKER MODAL ======================== -->
+<div id="locationModal" class="location-modal-overlay" aria-modal="true" role="dialog" aria-labelledby="locationModalTitle">
+    <div class="location-modal-box">
+        <div class="location-modal-icon">&#127807;</div>
+        <h2 class="location-modal-title" id="locationModalTitle">Where are you located?</h2>
+        <p class="location-modal-sub">Choose your city so we can show you the right products.</p>
+        <div class="location-modal-choices">
+            <button class="location-choice-btn" onclick="chooseLocation('bayelsa')">
+                <span class="choice-pin">&#128205;</span>
+                <span class="choice-name">Bayelsa</span>
+            </button>
+            <button class="location-choice-btn" onclick="chooseLocation('benin')">
+                <span class="choice-pin">&#128205;</span>
+                <span class="choice-name">Benin</span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- ======================== COMPACT HERO BANNER ======================== -->
 <section class="hero-compact">
     <div class="container">
@@ -20,17 +39,47 @@
     </div>
 </section>
 
-<!-- ======================== FEATURED PRODUCTS ======================== -->
-<section class="py-4">
+<!-- ======================== LOCATION TABS ======================== -->
+<section class="py-4 pb-0">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-center gap-3 mb-4 flex-wrap">
+            <button class="btn-location-tab active" id="tabBayelsa" onclick="switchLocation('bayelsa')">
+                &#128205; Bayelsa
+            </button>
+            <button class="btn-location-tab" id="tabBenin" onclick="switchLocation('benin')">
+                &#128205; Benin
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- ======================== BAYELSA PRODUCTS ======================== -->
+<section class="py-3" id="sectionBayelsa">
     <div class="container">
         <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
             <div>
-                <span class="section-tag">&#127807; Featured</span>
-                <h2 class="section-title mb-0">Top <span>Picks</span></h2>
+                <span class="section-tag">&#128205; Bayelsa</span>
+                <h2 class="section-title mb-0">Available in <span>Bayelsa</span></h2>
             </div>
             <a href="/shop" class="btn-hero-outline" style="padding:9px 22px; font-size:.9rem;">View All &rarr;</a>
         </div>
-        <div class="row g-4" id="featuredGrid"></div>
+        <div class="row g-4" id="bayelsaGrid"></div>
+        <p class="text-center mt-4" id="bayelsaEmpty" style="display:none; color:var(--text-muted-c);">No products available for Bayelsa yet.</p>
+    </div>
+</section>
+
+<!-- ======================== BENIN PRODUCTS ======================== -->
+<section class="py-3" id="sectionBenin" style="display:none;">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+            <div>
+                <span class="section-tag">&#128205; Benin</span>
+                <h2 class="section-title mb-0">Available in <span>Benin</span></h2>
+            </div>
+            <a href="/shop" class="btn-hero-outline" style="padding:9px 22px; font-size:.9rem;">View All &rarr;</a>
+        </div>
+        <div class="row g-4" id="beninGrid"></div>
+        <p class="text-center mt-4" id="beninEmpty" style="display:none; color:var(--text-muted-c);">No products available for Benin yet.</p>
     </div>
 </section>
 
@@ -106,15 +155,8 @@
 
 @push('scripts')
 <script>
-let currentFilter = 'featured';
-
-function renderProducts() {
-    const grid = document.getElementById('featuredGrid');
-    if (!grid) return;
-    const featured = PRODUCTS.filter(p => p.featured);
-    const list = featured.length ? featured : PRODUCTS.slice(0, 6);
-    grid.innerHTML = list.map(p => buildCard(p)).join('');
-}
+const BAYELSA_PRODUCTS = @json($bayelsaProducts);
+const BENIN_PRODUCTS   = @json($beninProducts);
 
 function buildCard(p) {
     const inCart   = cart.some(c => c.id === p.id);
@@ -122,7 +164,7 @@ function buildCard(p) {
     const newBadge = p.isNew ? `<span class="badge-new">NEW</span>` : '';
     const imgHtml  = p.image
         ? `<img src="${p.image}" alt="${p.name}" style="width:100%;height:160px;object-fit:cover;">`
-        : `<span class="product-emoji">${p.emoji || 'plant'}</span>`;
+        : `<span class="product-emoji">${p.emoji || '🌿'}</span>`;
     return `
     <div class="col-sm-6 col-lg-4">
         <div class="product-card">
@@ -170,11 +212,61 @@ function buildCard(p) {
     </div>`;
 }
 
+function renderGrid(products, gridId, emptyId) {
+    const grid  = document.getElementById(gridId);
+    const empty = document.getElementById(emptyId);
+    if (!grid) return;
+    if (products.length === 0) {
+        grid.innerHTML = '';
+        if (empty) empty.style.display = 'block';
+    } else {
+        grid.innerHTML = products.map(p => buildCard(p)).join('');
+        if (empty) empty.style.display = 'none';
+    }
+}
+
+function switchLocation(loc) {
+    const sectionBayelsa = document.getElementById('sectionBayelsa');
+    const sectionBenin   = document.getElementById('sectionBenin');
+    const tabBayelsa     = document.getElementById('tabBayelsa');
+    const tabBenin       = document.getElementById('tabBenin');
+
+    if (loc === 'bayelsa') {
+        sectionBayelsa.style.display = '';
+        sectionBenin.style.display   = 'none';
+        tabBayelsa.classList.add('active');
+        tabBenin.classList.remove('active');
+    } else {
+        sectionBayelsa.style.display = 'none';
+        sectionBenin.style.display   = '';
+        tabBayelsa.classList.remove('active');
+        tabBenin.classList.add('active');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    renderProducts();
+    renderGrid(BAYELSA_PRODUCTS, 'bayelsaGrid', 'bayelsaEmpty');
+    renderGrid(BENIN_PRODUCTS,   'beninGrid',   'beninEmpty');
+
+    // Show location modal on first visit; restore saved choice on return visits
+    const saved = localStorage.getItem('seu_location');
+    if (saved === 'bayelsa' || saved === 'benin') {
+        switchLocation(saved);
+    } else {
+        document.getElementById('locationModal').classList.add('visible');
+    }
+
     @if($flashSale ?? null)
         startCountdown('cdHours', 'cdMins', 'cdSecs', 'seu_deal_end', {{ $flashSale->ends_at->timestamp * 1000 }});
     @endif
 });
+
+function chooseLocation(loc) {
+    localStorage.setItem('seu_location', loc);
+    const modal = document.getElementById('locationModal');
+    modal.classList.add('hiding');
+    modal.addEventListener('animationend', () => modal.remove(), { once: true });
+    switchLocation(loc);
+}
 </script>
 @endpush

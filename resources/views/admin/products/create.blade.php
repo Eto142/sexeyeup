@@ -128,6 +128,17 @@
                 <label class="form-check-label" for="is_new">Mark as New</label>
             </div>
         </div>
+
+        <div class="table-card p-4 mt-4">
+            <h6 class="fw-bold mb-3">Location</h6>
+            <label class="form-label">Available In <span class="text-danger">*</span></label>
+            <select name="location" class="form-select @error('location') is-invalid @enderror" required>
+                <option value="both"    {{ old('location', 'both') == 'both'    ? 'selected' : '' }}>Both Locations</option>
+                <option value="bayelsa" {{ old('location') == 'bayelsa' ? 'selected' : '' }}>Bayelsa Only</option>
+                <option value="benin"   {{ old('location') == 'benin'   ? 'selected' : '' }}>Benin Only</option>
+            </select>
+            @error('location')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        </div>
     </div>
 </div>
 

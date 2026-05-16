@@ -46,6 +46,7 @@ class ProductController extends Controller
             'is_new'      => 'nullable|boolean',
             'featured'    => 'nullable|boolean',
             'active'      => 'nullable|boolean',
+            'location'    => 'required|in:bayelsa,benin,both',
             'description' => 'nullable|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);
@@ -86,6 +87,7 @@ class ProductController extends Controller
             'is_new'      => 'nullable|boolean',
             'featured'    => 'nullable|boolean',
             'active'      => 'nullable|boolean',
+            'location'    => 'required|in:bayelsa,benin,both',
             'description' => 'nullable|string',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
         ]);

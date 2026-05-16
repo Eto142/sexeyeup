@@ -15,6 +15,7 @@ class OrderController extends Controller
         $validated = $request->validate([
             'phone'           => 'required|string|max:30',
             'phone2'          => 'nullable|string|max:30',
+            'location'        => 'nullable|string|in:bayelsa,benin,unknown',
             'items'           => 'required|array|min:1',
             'items.*.id'      => 'required|integer',
             'items.*.name'    => 'required|string|max:255',
@@ -36,6 +37,7 @@ class OrderController extends Controller
             'customer_phone2' => $validated['phone2'] ?? null,
             'total'           => $total,
             'status'          => 'pending',
+            'location'        => $validated['location'] ?? 'unknown',
         ]);
 
         foreach ($validated['items'] as $item) {

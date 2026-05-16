@@ -9,7 +9,7 @@ class Product extends Model
     protected $fillable = [
         'name', 'strain', 'category', 'emoji', 'thc',
         'price_gram', 'price_ounce', 'rating', 'reviews',
-        'is_new', 'featured', 'active', 'image', 'cloudinary_public_id', 'description',
+        'is_new', 'featured', 'active', 'location', 'image', 'cloudinary_public_id', 'description',
     ];
 
     protected $casts = [
@@ -39,6 +39,7 @@ class Product extends Model
             'reviews'    => (int) $this->reviews,
             'isNew'      => (bool) $this->is_new,
             'featured'   => (bool) $this->featured,
+            'location'   => $this->location ?? 'both',
             'image'      => $this->image ?: null,
         ];
     }

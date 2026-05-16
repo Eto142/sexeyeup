@@ -183,13 +183,14 @@ function submitOrder() {
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Placing order…';
 
+    const location = localStorage.getItem('seu_location') || 'unknown';
     fetch('/orders', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
         },
-        body: JSON.stringify({ phone, phone2, items: cart }),
+        body: JSON.stringify({ phone, phone2, location, items: cart }),
     })
     .then(r => r.json())
     .then(data => {
