@@ -138,8 +138,29 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         if ($product->cloudinary_public_id) {
-            \CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::getFacadeRoot()
-                ->uploadApi()->destroy($product->cloudinary_public_id);
+            $cloudName = config('filesystems.disks.cloudinary.cloud');
+            $apiKey    = config('filesystems.disks.cloudinary.key');
+            $apiSecret = config('filesystems.disks.cloudinary.secret');
+            $timestamp = time();
+
+            $params    = ['public_id' => $product->cloudinary_public_id, 'timestamp' => $timestamp];
+            ksort($params);
+            $sigString = implode('&', array_map(
+                fn ($k, $v) => "{$k}={$v}",
+                array_keys($params),
+                array_values($params)
+            )) . $apiSecret;
+            $signature = sha1($sigString);
+
+            \Illuminate\Support\Facades\Http::post(
+                "https://api.cloudinary.com/v1_1/{$cloudName}/image/destroy",
+                [
+                    'public_id' => $product->cloudinary_public_id,
+                    'api_key'   => $apiKey,
+                    'timestamp' => $timestamp,
+                    'signature' => $signature,
+                ]
+            );
         }
         $product->delete();
 
