@@ -99,7 +99,7 @@
     .qr-frame {
         position: relative;
         display: inline-block;
-        margin-bottom: 1.75rem;
+        margin-bottom: 3rem;
     }
 
     /* corner brackets */
@@ -110,7 +110,7 @@
         content: '';
         position: absolute;
         width: 22px; height: 22px;
-        border-color: var(--green-neon);
+        border-color: #6dd5fa;
         border-style: solid;
         z-index: 3;
         transition: all .3s;
@@ -122,7 +122,7 @@
     .qr-frame:hover::before,
     .qr-frame:hover::after,
     .qr-frame:hover .corner-br,
-    .qr-frame:hover .corner-bl { border-color: #fff; width: 30px; height: 30px; }
+    .qr-frame:hover .corner-bl { border-color: #b8ecff; width: 30px; height: 30px; }
 
     /* scan line animation */
     .qr-scan-line {
@@ -155,6 +155,55 @@
         display: inline-block;
         position: relative;
         z-index: 2;
+    }
+
+    /* ── Cannabis leaf center logo ────────────────────────────── */
+    .qr-logo-center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        background: #ffffff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5;
+        box-shadow: 0 0 0 3px #ffffff;
+    }
+
+    /* ── Decorative hand icons ────────────────────────────────── */
+    .qr-deco-hand {
+        position: absolute;
+        font-size: 2.8rem;
+        color: #1a7a1a;
+        z-index: 5;
+        line-height: 1;
+        pointer-events: none;
+    }
+    .qr-deco-tr {
+        top: -3rem;
+        right: -3.2rem;
+        transform: rotate(225deg);
+    }
+    .qr-deco-bl {
+        bottom: 0.3rem;
+        left: -3.2rem;
+        transform: rotate(45deg);
+    }
+
+    /* ── Scan me label ────────────────────────────────────────── */
+    .qr-scan-me {
+        position: absolute;
+        bottom: -1.6rem;
+        right: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1a3a1a;
+        letter-spacing: .02em;
+        margin: 0;
     }
 
     /* ── URL pill ─────────────────────────────────────────────── */
@@ -283,9 +332,26 @@
             <div class="corner-br"></div>
             <div class="corner-bl"></div>
             <div class="qr-scan-line"></div>
+
+            <!-- Decorative hand icons -->
+            <div class="qr-deco-hand qr-deco-tr">
+                <i class="bi bi-hand-index-fill"></i>
+            </div>
+            <div class="qr-deco-hand qr-deco-bl">
+                <i class="bi bi-hand-index-fill"></i>
+            </div>
+
             <div class="qr-inner">
                 <div id="qrcode"></div>
+                <!-- Cannabis leaf center logo -->
+                <div class="qr-logo-center">
+                    <svg viewBox="0 0 100 115" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                        <path fill="#1a7a1a" d="M50,8 C47,15 43,23 39,31 C33,23 21,20 13,27 C21,32 30,34 37,33 C27,42 20,55 24,67 C30,61 38,56 43,50 C42,61 40,74 45,86 L48,86 L48,108 L52,108 L52,86 L55,86 C60,74 58,61 57,50 C62,56 70,61 76,67 C80,55 73,42 63,33 C70,34 79,32 87,27 C79,20 67,23 61,31 C57,23 53,15 50,8 Z"/>
+                    </svg>
+                </div>
             </div>
+
+            <p class="qr-scan-me">Scan me!</p>
         </div>
 
         <!-- URL pill -->
@@ -327,7 +393,7 @@
         text: SITE_URL,
         width: 200,
         height: 200,
-        colorDark: "#0d1f0d",
+        colorDark: "#1a5c1a",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H,
     });
