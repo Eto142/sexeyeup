@@ -13,11 +13,11 @@
         <div class="location-modal-choices">
             <button class="location-choice-btn" onclick="chooseLocation('bayelsa')">
                 <span class="choice-pin">&#128205;</span>
-                <span class="choice-name">Bayelsa</span>
+                <span class="choice-name">Bayelsa, Yenagoa</span>
             </button>
             <button class="location-choice-btn" onclick="chooseLocation('benin')">
                 <span class="choice-pin">&#128205;</span>
-                <span class="choice-name">Benin</span>
+                <span class="choice-name">Edo, Benin City</span>
             </button>
         </div>
     </div>
@@ -40,7 +40,7 @@
 </section>
 
 <!-- ======================== LOCATION TABS ======================== -->
-<section class="py-4 pb-0">
+<section class="py-4 pb-0" id="locationTabsSection">
     <div class="container">
         <div class="d-flex align-items-center justify-content-center gap-3 mb-4 flex-wrap">
             <button class="btn-location-tab active" id="tabBayelsa" onclick="switchLocation('bayelsa')">
@@ -60,6 +60,7 @@
             <div>
                 <span class="section-tag">&#128205; Bayelsa</span>
                 <h2 class="section-title mb-0">Available in <span>Bayelsa</span></h2>
+                <button onclick="resetLocation()" style="background:none;border:none;padding:0;font-size:.8rem;color:var(--text-muted-c);cursor:pointer;text-decoration:underline;margin-top:4px;">&#128259; Change location</button>
             </div>
             <a href="/shop" class="btn-hero-outline" style="padding:9px 22px; font-size:.9rem;">View All &rarr;</a>
         </div>
@@ -75,6 +76,7 @@
             <div>
                 <span class="section-tag">&#128205; Benin</span>
                 <h2 class="section-title mb-0">Available in <span>Benin</span></h2>
+                <button onclick="resetLocation()" style="background:none;border:none;padding:0;font-size:.8rem;color:var(--text-muted-c);cursor:pointer;text-decoration:underline;margin-top:4px;">&#128259; Change location</button>
             </div>
             <a href="/shop" class="btn-hero-outline" style="padding:9px 22px; font-size:.9rem;">View All &rarr;</a>
         </div>
@@ -171,12 +173,13 @@ function buildCard(p) {
     return `
     <div class="col-sm-6 col-lg-4">
         <div class="product-card">
-            <div class="product-img-wrap">
+            <a href="/products/${p.id}" style="text-decoration:none; color:inherit;">
+            <div class="product-img-wrap" style="cursor:pointer;">
                 ${imgHtml}
                 <span class="badge-thc">${p.thc}</span>
                 ${newBadge}
             </div>
-            <div class="product-body">
+            <div class="product-body" style="padding-bottom:0;">
                 <div class="product-name">${p.name}</div>
                 <div class="product-strain">${p.strain}</div>
                 <div class="d-flex align-items-center gap-2 mb-2">
@@ -196,6 +199,9 @@ function buildCard(p) {
                         </div>
                     </div>
                 </div>
+            </div>
+            </a>
+                <div class="product-body" style="padding-top:0;">
                 <div class="card-qty-row">
                     <button class="card-qty-btn" onclick="changeCardQty(${p.id},-1)"><i class="bi bi-dash"></i></button>
                     <span class="card-qty-val" id="cardQtyVal_${p.id}">1</span>
@@ -210,7 +216,7 @@ function buildCard(p) {
                         <i class="bi bi-heart"></i>
                     </button>
                 </div>
-            </div>
+                </div>
         </div>
     </div>`;
 }
@@ -255,6 +261,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('seu_location');
     if (saved === 'bayelsa' || saved === 'benin') {
         switchLocation(saved);
+        const tabs = document.getElementById('locationTabsSection');
+        if (tabs) tabs.style.display = 'none';
     } else {
         document.getElementById('locationModal').classList.add('visible');
     }
@@ -264,12 +272,21 @@ document.addEventListener('DOMContentLoaded', () => {
     @endif
 });
 
+function resetLocation() {
+    localStorage.removeItem('seu_location');
+    document.getElementById('locationModal').classList.add('visible');
+}
+
 function chooseLocation(loc) {
     localStorage.setItem('seu_location', loc);
     const modal = document.getElementById('locationModal');
     modal.classList.add('hiding');
-    modal.addEventListener('animationend', () => modal.remove(), { once: true });
+    modal.addEventListener('animationend', () => {
+        modal.classList.remove('visible', 'hiding');
+    }, { once: true });
     switchLocation(loc);
+    const tabs = document.getElementById('locationTabsSection');
+    if (tabs) tabs.style.display = 'none';
 }
 </script>
 @endpush

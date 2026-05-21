@@ -141,18 +141,22 @@ function buildCard(p) {
     return `
     <div class="col-sm-6 col-xl-4">
         <div class="product-card">
-            <div class="product-img-wrap">
+            <a href="/products/${p.id}" style="text-decoration:none; color:inherit;">
+            <div class="product-img-wrap" style="cursor:pointer;">
                 ${imgHtml}
                 <span class="badge-thc">${p.thc}</span>
                 ${newBadge}
             </div>
-            <div class="product-body">
+            <div class="product-body" style="padding-bottom:0;">
                 <div class="product-name">${p.name}</div>
                 <div class="product-strain">${p.strain}</div>
                 <div class="d-flex align-items-center gap-2 mb-2">
                     <span class="stars">${stars}</span>
                     <span class="star-count">(${p.reviews})</span>
                 </div>
+            </div>
+            </a>
+            <div class="product-body" style="padding-top:0;">
                 <div class="price-unit-row">
                     <span class="product-price" id="cardPrice_${p.id}">${formatNaira(p.priceGram)}</span>
                     <div class="d-flex align-items-center gap-2">

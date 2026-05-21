@@ -59,4 +59,18 @@ class PageController extends Controller
     {
         return view('pages.qr-code');
     }
+
+    public function product($id)
+    {
+        $product = Product::where('active', true)->findOrFail($id);
+        $related = Product::where('active', true)
+            ->where('id', '!=', $product->id)
+            ->where('category', $product->category)
+            ->limit(3)
+            ->get()
+            ->map(fn($p) => $p->toJsArray())
+            ->values();
+
+        return view('pages.product', compact('product', 'related'));
+    }
 }
