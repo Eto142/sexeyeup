@@ -193,7 +193,7 @@ function buildCard(p) {
                         <div class="unit-select-wrap">
                             <select class="unit-select" id="unitSelect_${p.id}" onchange="selectUnit(${p.id}, this.value)">
                                 <option value="gram">Gram</option>
-                                <option value="ounce">Ounce</option>
+                                <option value="ounce">${p.category === 'laughgas' ? 'Carton' : 'Ounce'}</option>
                             </select>
                             <i class="bi bi-chevron-down unit-chevron"></i>
                         </div>

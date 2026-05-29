@@ -197,6 +197,15 @@
         <i class="bi bi-speedometer2"></i> Dashboard
     </a>
 
+     <div class="nav-section">Products</div>
+    <a href="{{ route('admin.products.index') }}" class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
+        <i class="bi bi-bag"></i> Products
+    </a>
+    <a href="{{ route('admin.products.create') }}" class="nav-link {{ request()->routeIs('admin.products.create') ? 'active' : '' }}">
+        <i class="bi bi-plus-circle"></i> Add Product
+    </a>
+
+
     {{-- Users section removed — customers don't register --}}
 
     <div class="nav-section">Orders</div>
@@ -212,14 +221,7 @@
         <i class="bi bi-plus-circle"></i> New Flash Sale
     </a>
 
-    <div class="nav-section">Products</div>
-    <a href="{{ route('admin.products.index') }}" class="nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
-        <i class="bi bi-bag"></i> Products
-    </a>
-    <a href="{{ route('admin.products.create') }}" class="nav-link {{ request()->routeIs('admin.products.create') ? 'active' : '' }}">
-        <i class="bi bi-plus-circle"></i> Add Product
-    </a>
-
+   
     <div class="nav-section">Communication</div>
     <a href="{{ route('admin.send.email') }}" class="nav-link {{ request()->routeIs('admin.send.email') ? 'active' : '' }}">
         <i class="bi bi-envelope"></i> Send Email

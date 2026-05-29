@@ -29,8 +29,8 @@
                     @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-sm-6">
-                    <label class="form-label">Strain <span class="text-danger">*</span></label>
-                    <input type="text" name="strain" class="form-control @error('strain') is-invalid @enderror"
+                    <label class="form-label" id="strainLabel">Strain <span class="text-danger">*</span></label>
+                    <input type="text" name="strain" id="strainInput" class="form-control @error('strain') is-invalid @enderror"
                            value="{{ old('strain', $product->strain) }}" required>
                     @error('strain')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
@@ -38,7 +38,7 @@
                     <label class="form-label">Category <span class="text-danger">*</span></label>
                     <select name="category" class="form-select @error('category') is-invalid @enderror" required>
                         <option value="">Select…</option>
-                        @foreach(['flower'=>'🌸 Flower','edible'=>'🍪 Edibles','concentrate'=>'💎 Concentrates','vape'=>'💨 Vapes','preroll'=>'🚬 Pre-Rolls'] as $val => $label)
+                        @foreach(['flower'=>'🌸 Flower','edible'=>'🍪 Edibles','concentrate'=>'📈 Concentrates','vape'=>'💨 Vapes','preroll'=>'🚬 Pre-Rolls','laughgas'=>'😂 Laugh Gas'] as $val => $label)
                         <option value="{{ $val }}" {{ old('category', $product->category)==$val ? 'selected' : '' }}>
                             {{ $label }}
                         </option>
@@ -47,7 +47,7 @@
                     @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-sm-6">
-                    <label class="form-label">THC / Potency</label>
+                    <label class="form-label" id="thcLabel">THC / Potency</label>
                     <input type="text" name="thc" class="form-control"
                            value="{{ old('thc', $product->thc) }}" placeholder="e.g. 22% THC or 100mg">
                 </div>
@@ -57,7 +57,7 @@
                            value="{{ old('emoji', $product->emoji) }}" maxlength="10">
                 </div>
                 <div class="col-sm-6">
-                    <label class="form-label">Price per Gram (&#8358;) <span class="text-danger">*</span></label>
+                    <label class="form-label" id="priceGramLabel">Price per Gram (&#8358;) <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text">₦</span>
                         <input type="number" name="price_gram" step="1" min="0"
@@ -67,7 +67,7 @@
                     @error('price_gram')<div class="text-danger" style="font-size:.8rem;">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-sm-6">
-                    <label class="form-label">Price per Ounce (&#8358;) <span class="text-danger">*</span></label>
+                    <label class="form-label" id="priceOunceLabel">Price per Ounce (&#8358;) <span class="text-danger">*</span></label>
                     <div class="input-group">
                         <span class="input-group-text">₦</span>
                         <input type="number" name="price_ounce" step="1" min="0"
@@ -177,5 +177,29 @@ function previewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+function updateFieldLabels(category) {
+    const isLaughGas = category === 'laughgas';
+
+    document.getElementById('strainLabel').innerHTML = isLaughGas
+        ? 'Type / Variant'
+        : 'Strain <span class="text-danger">*</span>';
+    document.getElementById('strainInput').required = !isLaughGas;
+    if (isLaughGas) document.getElementById('strainInput').placeholder = 'e.g. N2O Balloon';
+    else            document.getElementById('strainInput').placeholder = '';
+
+    document.getElementById('thcLabel').textContent = isLaughGas ? 'Cylinder Size / Grade' : 'THC / Potency';
+
+    document.getElementById('priceGramLabel').innerHTML = 'Price per Gram (&#8358;) <span class="text-danger">*</span>';
+    document.getElementById('priceOunceLabel').innerHTML = (isLaughGas ? 'Price per Carton (&#8358;)' : 'Price per Ounce (&#8358;)') + ' <span class="text-danger">*</span>';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const categorySelect = document.querySelector('select[name="category"]');
+    updateFieldLabels(categorySelect.value);
+    categorySelect.addEventListener('change', function () {
+        updateFieldLabels(this.value);
+    });
+});
 </script>
 @endpush

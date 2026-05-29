@@ -56,7 +56,7 @@
                             <div class="unit-select-wrap">
                                 <select class="unit-select" id="detailUnit" onchange="updateDetailPrice()">
                                     <option value="gram">Gram</option>
-                                    <option value="ounce">Ounce</option>
+                                    <option value="ounce">{{ $product->category === 'laughgas' ? 'Carton' : 'Ounce' }}</option>
                                 </select>
                                 <i class="bi bi-chevron-down unit-chevron"></i>
                             </div>
@@ -75,7 +75,7 @@
                     <div class="d-flex flex-wrap gap-2 mb-4">
                         <span class="product-meta-tag"><i class="bi bi-tag-fill"></i> {{ ucfirst($product->category) }}</span>
                         @if($product->thc)
-                            <span class="product-meta-tag"><i class="bi bi-activity"></i> THC: {{ $product->thc }}</span>
+                            <span class="product-meta-tag"><i class="bi bi-activity"></i> {{ $product->category === 'laughgas' ? 'Size/Grade' : 'THC' }}: {{ $product->thc }}</span>
                         @endif
                         @if($product->location && $product->location !== 'both')
                             <span class="product-meta-tag"><i class="bi bi-geo-alt-fill"></i> {{ ucfirst($product->location) }} only</span>

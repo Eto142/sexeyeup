@@ -67,6 +67,7 @@
                         <button class="cat-btn text-start" onclick="setFilter('concentrate',this)">💎 Concentrates</button>
                         <button class="cat-btn text-start" onclick="setFilter('vape',this)">💨 Vapes</button>
                         <button class="cat-btn text-start" onclick="setFilter('preroll',this)">🚬 Pre-Rolls</button>
+                        <button class="cat-btn text-start" onclick="setFilter('laughgas',this)">😂 Laugh Gas</button>
                     </div>
 
                     <div style="font-weight:700; color:var(--text-white); font-size:.9rem; margin:28px 0 14px; letter-spacing:.5px;">PRICE RANGE</div>
@@ -86,6 +87,7 @@
                     <button class="cat-btn" onclick="setFilter('concentrate',this)">💎 Conc.</button>
                     <button class="cat-btn" onclick="setFilter('vape',this)">💨 Vapes</button>
                     <button class="cat-btn" onclick="setFilter('preroll',this)">🚬 Pre-Rolls</button>
+                    <button class="cat-btn" onclick="setFilter('laughgas',this)">😂 Laugh Gas</button>
                 </div>
             </div>
 
@@ -214,7 +216,7 @@ function buildCard(p) {
                         <div class="unit-select-wrap">
                             <select class="unit-select" id="unitSelect_${p.id}" onchange="selectUnit(${p.id}, this.value)">
                                 <option value="gram">Gram</option>
-                                <option value="ounce">Ounce</option>
+                                <option value="ounce">${p.category === 'laughgas' ? 'Carton' : 'Ounce'}</option>
                             </select>
                             <i class="bi bi-chevron-down unit-chevron"></i>
                         </div>

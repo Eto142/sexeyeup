@@ -43,10 +43,29 @@ class ProductController extends Controller
         ];
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::latest()->paginate(15);
-        return view('admin.products.index', compact('products'));
+        $tab      = $request->query('tab', 'all');
+        $query    = Product::latest();
+
+        if ($tab === 'bayelsa') {
+            $query->where('location', 'bayelsa');
+        } elseif ($tab === 'benin') {
+            $query->where('location', 'benin');
+        } elseif ($tab === 'both') {
+            $query->where('location', 'both');
+        }
+
+        $products = $query->paginate(15)->withQueryString();
+
+        $counts = [
+            'all'     => Product::count(),
+            'bayelsa' => Product::where('location', 'bayelsa')->count(),
+            'benin'   => Product::where('location', 'benin')->count(),
+            'both'    => Product::where('location', 'both')->count(),
+        ];
+
+        return view('admin.products.index', compact('products', 'tab', 'counts'));
     }
 
     public function create()
@@ -58,8 +77,8 @@ class ProductController extends Controller
     {
         $data = $request->validate([
             'name'        => 'required|string|max:255',
-            'strain'      => 'required|string|max:255',
-            'category'    => 'required|in:flower,edible,concentrate,vape,preroll',
+            'strain'      => 'nullable|string|max:255',
+            'category'    => 'required|in:flower,edible,concentrate,vape,preroll,laughgas',
             'emoji'       => 'nullable|string|max:10',
             'thc'         => 'nullable|string|max:50',
             'price_gram'  => 'required|numeric|min:0',
@@ -99,8 +118,8 @@ class ProductController extends Controller
     {
         $data = $request->validate([
             'name'        => 'required|string|max:255',
-            'strain'      => 'required|string|max:255',
-            'category'    => 'required|in:flower,edible,concentrate,vape,preroll',
+            'strain'      => 'nullable|string|max:255',
+            'category'    => 'required|in:flower,edible,concentrate,vape,preroll,laughgas',
             'emoji'       => 'nullable|string|max:10',
             'thc'         => 'nullable|string|max:50',
             'price_gram'  => 'required|numeric|min:0',
