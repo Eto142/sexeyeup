@@ -11,8 +11,33 @@
     <p>Lab-tested, strain-verified, freshly harvested. Browse all products below.</p>
 </div>
 
+<!-- Location Picker Modal -->
+<div id="shopLocationModal" class="location-modal-overlay" aria-modal="true" role="dialog" aria-labelledby="shopLocationModalTitle">
+    <div class="location-modal-box">
+        <div class="location-modal-icon">&#127807;</div>
+        <h2 class="location-modal-title" id="shopLocationModalTitle">Where are you located?</h2>
+        <p class="location-modal-sub">Choose your city so we can show you the right products.</p>
+        <div class="location-modal-choices">
+            <button class="location-choice-btn" onclick="chooseShopLocation('bayelsa')">
+                <span class="choice-pin">&#128205;</span>
+                <span class="choice-name">Bayelsa, Yenagoa</span>
+            </button>
+            <button class="location-choice-btn" onclick="chooseShopLocation('benin')">
+                <span class="choice-pin">&#128205;</span>
+                <span class="choice-name">Edo, Benin City</span>
+            </button>
+        </div>
+    </div>
+</div>
+
 <section class="py-5">
     <div class="container">
+
+        <!-- Location indicator -->
+        <div class="d-flex align-items-center gap-3 mb-4 flex-wrap">
+            <span class="section-tag" id="shopLocationTag">&#128205; Bayelsa</span>
+            <button onclick="resetShopLocation()" style="background:none;border:none;padding:0;font-size:.82rem;color:var(--text-muted-c);cursor:pointer;text-decoration:underline;">&#128259; Change location</button>
+        </div>
 
         <!-- Top Bar: Search + Sort -->
         <div class="sort-bar">
@@ -78,6 +103,30 @@
 <script>
 let shopFilter  = 'all';
 let currentFilter = 'all';
+let shopLocation = localStorage.getItem('seu_location') || null;
+
+function switchShopLocation(loc) {
+    shopLocation = loc;
+    const labels = { bayelsa: '&#128205; Bayelsa', benin: '&#128205; Benin' };
+    document.getElementById('shopLocationTag').innerHTML = labels[loc] || '&#128205; ' + loc;
+    renderShop();
+}
+
+function chooseShopLocation(loc) {
+    localStorage.setItem('seu_location', loc);
+    const modal = document.getElementById('shopLocationModal');
+    modal.classList.add('hiding');
+    modal.addEventListener('animationend', () => {
+        modal.classList.remove('visible', 'hiding');
+    }, { once: true });
+    switchShopLocation(loc);
+}
+
+function resetShopLocation() {
+    localStorage.removeItem('seu_location');
+    shopLocation = null;
+    document.getElementById('shopLocationModal').classList.add('visible');
+}
 
 // Pre-select category from URL param  (?cat=flower)
 (function readUrlParams() {
@@ -109,10 +158,11 @@ function renderShop() {
     const countEl   = document.getElementById('resultCount');
 
     let list = PRODUCTS.filter(p => {
+        const matchLoc   = !shopLocation || p.location === 'both' || p.location === shopLocation;
         const matchCat   = shopFilter === 'all' || p.category === shopFilter;
         const matchQ     = !query || p.name.toLowerCase().includes(query) || p.strain.toLowerCase().includes(query);
         const matchPrice = p.priceGram <= maxPrice;
-        return matchCat && matchQ && matchPrice;
+        return matchLoc && matchCat && matchQ && matchPrice;
     });
 
     // Sort
@@ -191,6 +241,15 @@ window.addToCart = function(id, unit) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Apply saved location or show modal
+    const saved = localStorage.getItem('seu_location');
+    if (saved === 'bayelsa' || saved === 'benin') {
+        switchShopLocation(saved);
+    } else {
+        document.getElementById('shopLocationModal').classList.add('visible');
+        renderShop();
+    }
+
     // Sync sidebar buttons with URL cat param
     if (shopFilter !== 'all') {
         document.querySelectorAll('.cat-btn').forEach(b => {
@@ -200,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    renderShop();
 });
 </script>
 @endpush
