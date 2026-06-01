@@ -10,9 +10,11 @@ class WhatsAppService
 {
     public function notifyNewOrder(Order $order): void
     {
-        $instanceId = config('services.waapi.instance_id');
-        $apiToken   = config('services.waapi.api_token');
-        $chatId     = config('services.waapi.chat_id'); // e.g. 2348012345678@c.us
+        // Route to the correct WhatsApp number based on order location
+        $configKey  = $order->location === 'bayelsa' ? 'waapi_bayelsa' : 'waapi';
+        $instanceId = config("services.{$configKey}.instance_id");
+        $apiToken   = config("services.{$configKey}.api_token");
+        $chatId     = config("services.{$configKey}.chat_id");
 
         if (empty($instanceId) || empty($apiToken) || empty($chatId)) {
             return; // not configured — skip silently

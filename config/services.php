@@ -28,10 +28,24 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // Benin / Edo WhatsApp (existing)
     'waapi' => [
-        'instance_id' => env('WAAPI_INSTANCE_ID'),   // numeric instance ID from waapi.app dashboard
-        'api_token'   => env('WAAPI_API_TOKEN'),     // Bearer token from waapi.app dashboard
-        'chat_id'     => env('WAAPI_CHAT_ID'),       // your WhatsApp number e.g. 2348012345678@c.us
+        'instance_id' => env('WAAPI_INSTANCE_ID'),
+        'api_token'   => env('WAAPI_API_TOKEN'),
+        'chat_id'     => env('WAAPI_CHAT_ID'),       // e.g. 2348012345678@c.us
+    ],
+
+    // Bayelsa WhatsApp (separate number)
+    'waapi_bayelsa' => [
+        'instance_id' => env('WAAPI_BAYELSA_INSTANCE_ID'),
+        'api_token'   => env('WAAPI_BAYELSA_API_TOKEN'),
+        'chat_id'     => env('WAAPI_BAYELSA_CHAT_ID'),
+    ],
+
+    // Order notification email addresses per location
+    'order_mail' => [
+        'benin'   => env('MAIL_BENIN_ADDRESS'),    // support mail — Benin/Edo orders
+        'bayelsa' => env('MAIL_BAYELSA_ADDRESS'),  // info mail   — Bayelsa orders
     ],
 
     'slack' => [

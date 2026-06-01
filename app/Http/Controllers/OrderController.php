@@ -51,7 +51,12 @@ class OrderController extends Controller
         }
 
         try {
-            Mail::to(config('mail.from.address'))
+            // Route notification email based on order location
+            $notifyEmail = $order->location === 'bayelsa'
+                ? config('services.order_mail.bayelsa', config('mail.from.address'))
+                : config('services.order_mail.benin',   config('mail.from.address'));
+
+            Mail::to($notifyEmail)
                 ->send(new NewOrderMail($order));
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('NewOrderMail failed: ' . $e->getMessage());
