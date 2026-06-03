@@ -48,9 +48,10 @@ Route::middleware(['web'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/change-password', [AdminProfileController::class, 'showChangePassword'])->name('change.password');
         Route::post('/change-password', [AdminProfileController::class, 'changePassword'])->name('change.password.post');
 
-        // Site Settings (passcode)
+        // Site Settings (passcode + account details)
         Route::get('/site-settings', [SiteSettingsController::class, 'showPasscode'])->name('site-settings');
         Route::patch('/site-settings/passcode', [SiteSettingsController::class, 'updatePasscode'])->name('site-settings.passcode');
+        Route::patch('/site-settings/account-details', [SiteSettingsController::class, 'updateAccountDetails'])->name('site-settings.account-details');
 
         // Visitors
         Route::get('/visitors', [VisitorController::class, 'index'])->name('visitors');

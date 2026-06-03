@@ -105,6 +105,15 @@ function getCartCount() {
     return cart.reduce((s, i) => s + i.qty, 0);
 }
 
+function getDeliveryNotice() {
+    const gramQty  = cart.filter(i => i.unit === 'gram').reduce((s, i) => s + i.qty, 0);
+    const hasOunce = cart.some(i => i.unit === 'ounce');
+    const free     = hasOunce || gramQty >= 3;
+    return free
+        ? { free: true,  label: '✅ Free delivery' }
+        : { free: false, label: '🚚 Delivery fee applies' };
+}
+
 function addToCart(id, unit) {
     unit = unit || 'gram';
     const product = PRODUCTS.find(p => p.id === id);
@@ -159,17 +168,70 @@ function checkout() {
 function renderCheckoutSummary() {
     const el = document.getElementById('checkoutSummary');
     if (!el) return;
-    el.innerHTML = cart.map(item => `
-        <div class="d-flex justify-content-between align-items-center py-2" style="border-bottom:1px solid var(--border-subtle); font-size:.85rem;">
-            <span>${item.name} <span style="color:var(--text-muted-c); font-size:.78rem;">(${item.unit === 'ounce' ? '1 oz' : '1 g'} &times; ${item.qty})</span></span>
-            <span style="color:var(--green-bright); font-weight:700; white-space:nowrap; margin-left:10px;">${formatNaira(item.price * item.qty)}</span>
+
+    if (!cart.length) {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+        if (modal) modal.hide();
+        return;
+    }
+
+    const dn = getDeliveryNotice();
+    const deliveryRow = dn.free
+        ? `<div style="text-align:center; font-size:.78rem; margin-top:8px; color:var(--green-bright);">✅ Free delivery</div>`
+        : `<div style="text-align:center; font-size:.78rem; margin-top:8px; color:#f59e0b;">🚚 Delivery fee applies</div>`;
+
+    el.innerHTML = `
+        <div style="text-align:right; margin-bottom:6px;">
+            <button onclick="clearCheckoutCart()" style="background:none; border:none; color:#ef4444; font-size:.75rem; cursor:pointer; padding:0; text-decoration:underline;">🗑️ Clear all</button>
+        </div>
+    ` + cart.map(item => `
+        <div class="d-flex align-items-center py-2" style="border-bottom:1px solid var(--border-subtle); font-size:.85rem; gap:8px;">
+            <div style="flex:1; min-width:0; overflow:hidden;">
+                <div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.name}</div>
+                <div style="color:var(--text-muted-c); font-size:.74rem;">${item.unit === 'ounce' ? '1 oz' : '1 g'} &middot; ${formatNaira(item.price * item.qty)}</div>
+            </div>
+            <div class="qty-control" style="flex-shrink:0;">
+                <button class="qty-btn" onclick="changeQtyInCheckout('${item.cartKey}',-1)"><i class="bi bi-dash"></i></button>
+                <span class="qty-val">${item.qty}</span>
+                <button class="qty-btn" onclick="changeQtyInCheckout('${item.cartKey}',1)"><i class="bi bi-plus"></i></button>
+            </div>
+            <button class="btn-remove" onclick="removeItemFromCheckout('${item.cartKey}')" style="flex-shrink:0;"><i class="bi bi-trash3"></i></button>
         </div>
     `).join('') + `
         <div class="d-flex justify-content-between align-items-center pt-2 pb-1">
             <span style="font-weight:700;">Total</span>
             <span style="color:var(--green-neon); font-family:'Bebas Neue',cursive; font-size:1.5rem;">${formatNaira(getCartTotal())}</span>
         </div>
+        ${deliveryRow}
     `;
+}
+
+function changeQtyInCheckout(cartKey, delta) {
+    const item = cart.find(c => c.cartKey === cartKey);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(c => c.cartKey !== cartKey);
+    saveCart();
+    updateCartUI();
+    renderCheckoutSummary();
+}
+
+function removeItemFromCheckout(cartKey) {
+    const item = cart.find(c => c.cartKey === cartKey);
+    cart = cart.filter(c => c.cartKey !== cartKey);
+    saveCart();
+    updateCartUI();
+    if (item) showToast(`🗑️ <strong>${item.name}</strong> removed.`);
+    renderCheckoutSummary();
+}
+
+function clearCheckoutCart() {
+    cart = [];
+    saveCart();
+    updateCartUI();
+    const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+    if (modal) modal.hide();
+    showToast('🗑️ Cart cleared.');
 }
 
 function submitOrder() {
@@ -179,11 +241,57 @@ function submitOrder() {
         showToast('⚠️ Please enter your phone number.');
         return;
     }
-    const btn = document.getElementById('placeOrderBtn');
+
+    const location = localStorage.getItem('seu_location') || 'unknown';
+
+    // Bayelsa: show account details step before placing order
+    if (location === 'bayelsa') {
+        showPaymentDetails();
+        return;
+    }
+
+    // Non-Bayelsa: place order immediately
+    placeOrder(phone, phone2, location, false);
+}
+
+function showPaymentDetails() {
+    const acc = window.BAYELSA_ACCOUNT || {};
+    document.getElementById('payAccBank').textContent    = acc.bank_name      || '—';
+    document.getElementById('payAccNumber').textContent  = acc.account_number || '—';
+    document.getElementById('payAccName').textContent    = acc.account_name   || '—';
+    document.getElementById('payAccAmount').textContent  = formatNaira(getCartTotal());
+
+    const noteEl = document.getElementById('payAccNote');
+    noteEl.textContent = acc.note ? '📌 ' + acc.note : '';
+
+    // Switch to step 2
+    document.getElementById('checkoutStep1').style.display     = 'none';
+    document.getElementById('checkoutStep2').style.display     = 'block';
+    document.getElementById('placeOrderBtn').style.display     = 'none';
+    document.getElementById('checkoutStep2Btns').style.display = 'block';
+}
+
+function backToStep1() {
+    document.getElementById('checkoutStep1').style.display     = 'block';
+    document.getElementById('checkoutStep2').style.display     = 'none';
+    document.getElementById('placeOrderBtn').style.display     = 'block';
+    document.getElementById('checkoutStep2Btns').style.display = 'none';
+}
+
+function confirmPaid() {
+    const phone    = document.getElementById('checkoutPhone').value.trim();
+    const phone2   = document.getElementById('checkoutPhone2').value.trim();
+    const location = localStorage.getItem('seu_location') || 'unknown';
+    placeOrder(phone, phone2, location, true);
+}
+
+function placeOrder(phone, phone2, location, fromPaidBtn) {
+    const btn = fromPaidBtn
+        ? document.getElementById('paidBtn')
+        : document.getElementById('placeOrderBtn');
     btn.disabled = true;
     btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Placing order…';
 
-    const location = localStorage.getItem('seu_location') || 'unknown';
     fetch('/orders', {
         method: 'POST',
         headers: {
@@ -200,9 +308,10 @@ function submitOrder() {
             updateCartUI();
             const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
             if (modal) modal.hide();
-            document.getElementById('checkoutPhone').value = '';
+            document.getElementById('checkoutPhone').value  = '';
             document.getElementById('checkoutPhone2').value = '';
-            showToast(`✅ Order <strong>${data.reference}</strong> placed! We’ll be in touch shortly.`);
+            backToStep1();
+            showToast(`✅ Order <strong>${data.reference}</strong> placed! We'll be in touch shortly.`);
         } else {
             showToast('❌ ' + (data.message || 'Something went wrong. Please try again.'));
         }
@@ -210,7 +319,9 @@ function submitOrder() {
     .catch(() => showToast('❌ Connection error. Please try again.'))
     .finally(() => {
         btn.disabled = false;
-        btn.innerHTML = '<i class="bi bi-lock-fill"></i> Place Order';
+        btn.innerHTML = fromPaidBtn
+            ? '<i class="bi bi-check-circle-fill"></i> I&#39;ve Paid'
+            : '<i class="bi bi-lock-fill"></i> Place Order';
     });
 }
 
@@ -280,6 +391,14 @@ function renderCart() {
 
     const total = document.getElementById('cartTotal');
     if (total) total.textContent = formatNaira(getCartTotal());
+
+    const noticeEl = document.getElementById('deliveryNoticeCart');
+    if (noticeEl) {
+        const dn = getDeliveryNotice();
+        noticeEl.innerHTML = dn.free
+            ? `<span style="color:var(--green-bright);">✅ Free delivery</span>`
+            : `<span style="color:#f59e0b;">🚚 Delivery fee applies</span>`;
+    }
 }
 
 /* ── Toast ─────────────────────────────────────────────────── */

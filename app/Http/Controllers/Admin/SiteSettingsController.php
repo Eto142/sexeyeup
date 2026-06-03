@@ -22,7 +22,14 @@ class SiteSettingsController extends Controller
             }
         }
 
-        return view('admin.site_settings', compact('currentPasscode'));
+        $accountDetails = [
+            'bank_name'      => SiteSetting::get('bayelsa_bank_name', ''),
+            'account_number' => SiteSetting::get('bayelsa_account_number', ''),
+            'account_name'   => SiteSetting::get('bayelsa_account_name', ''),
+            'note'           => SiteSetting::get('bayelsa_account_note', ''),
+        ];
+
+        return view('admin.site_settings', compact('currentPasscode', 'accountDetails'));
     }
 
     public function updatePasscode(Request $request)
@@ -38,5 +45,22 @@ class SiteSettingsController extends Controller
 
         SiteSetting::set('passcode', Crypt::encryptString($request->passcode));
         return back()->with('success', 'Passcode updated successfully.');
+    }
+
+    public function updateAccountDetails(Request $request)
+    {
+        $request->validate([
+            'bank_name'      => 'nullable|string|max:100',
+            'account_number' => 'nullable|string|max:20',
+            'account_name'   => 'nullable|string|max:100',
+            'note'           => 'nullable|string|max:300',
+        ]);
+
+        SiteSetting::set('bayelsa_bank_name',      $request->bank_name ?? '');
+        SiteSetting::set('bayelsa_account_number', $request->account_number ?? '');
+        SiteSetting::set('bayelsa_account_name',   $request->account_name ?? '');
+        SiteSetting::set('bayelsa_account_note',   $request->note ?? '');
+
+        return back()->with('account_success', 'Bayelsa account details updated successfully.');
     }
 }

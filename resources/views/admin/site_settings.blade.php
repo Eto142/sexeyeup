@@ -4,7 +4,63 @@
 @section('page-title', 'Site Settings')
 
 @section('content')
-<div class="row justify-content-center">
+<div class="row justify-content-center g-4">
+    <!-- ── Bayelsa Account Details ── -->
+    <div class="col-lg-6 col-md-8">
+        <div class="card" style="border-radius:10px; border:1px solid #e5e7eb;">
+            <div class="card-body p-4">
+                <h5 class="mb-1 fw-semibold">Bayelsa Payment Account Details</h5>
+                <p class="text-muted mb-4" style="font-size:.875rem;">
+                    These details will be shown to Bayelsa customers after they fill in their order details, so they can make a transfer before confirming payment.
+                </p>
+
+                @if(session('account_success'))
+                <div class="alert alert-success py-2 px-3 mb-3" style="font-size:.875rem;">{{ session('account_success') }}</div>
+                @endif
+
+                <form action="{{ route('admin.site-settings.account-details') }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.875rem;">Bank Name</label>
+                        <input type="text" name="bank_name" class="form-control @error('bank_name') is-invalid @enderror"
+                               value="{{ old('bank_name', $accountDetails['bank_name']) }}"
+                               placeholder="e.g. First Bank">
+                        @error('bank_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.875rem;">Account Number</label>
+                        <input type="text" name="account_number" class="form-control @error('account_number') is-invalid @enderror"
+                               value="{{ old('account_number', $accountDetails['account_number']) }}"
+                               placeholder="e.g. 0123456789">
+                        @error('account_number')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.875rem;">Account Name</label>
+                        <input type="text" name="account_name" class="form-control @error('account_name') is-invalid @enderror"
+                               value="{{ old('account_name', $accountDetails['account_name']) }}"
+                               placeholder="e.g. John Doe">
+                        @error('account_name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold" style="font-size:.875rem;">Additional Note <span class="text-muted fw-normal">(optional)</span></label>
+                        <input type="text" name="note" class="form-control @error('note') is-invalid @enderror"
+                               value="{{ old('note', $accountDetails['note']) }}"
+                               placeholder="e.g. Use your order reference as description">
+                        @error('note')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-success px-4">Save Account Details</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Passcode ── -->
     <div class="col-lg-6 col-md-8">
         <div class="card" style="border-radius:10px; border:1px solid #e5e7eb;">
             <div class="card-body p-4">

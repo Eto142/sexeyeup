@@ -175,6 +175,7 @@
             <span class="cart-total-label">Subtotal</span>
             <span class="cart-total-val" id="cartTotal">₦0</span>
         </div>
+        <div id="deliveryNoticeCart" style="font-size:.78rem; text-align:center; margin-bottom:10px;"></div>
         <button class="btn-checkout" onclick="checkout()">
             <i class="bi bi-lock-fill"></i> Secure Checkout
         </button>
@@ -189,6 +190,16 @@
 </button>
 
 <!-- ======================== CHECKOUT MODAL ======================== -->
+@php
+    $bayelsaAccount = [
+        'bank_name'      => \App\Models\SiteSetting::get('bayelsa_bank_name', ''),
+        'account_number' => \App\Models\SiteSetting::get('bayelsa_account_number', ''),
+        'account_name'   => \App\Models\SiteSetting::get('bayelsa_account_name', ''),
+        'note'           => \App\Models\SiteSetting::get('bayelsa_account_note', ''),
+    ];
+@endphp
+<script>window.BAYELSA_ACCOUNT = @json($bayelsaAccount);</script>
+
 <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content checkout-modal-content">
@@ -197,28 +208,73 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter:invert(1) sepia(1) saturate(3) hue-rotate(90deg);"></button>
             </div>
             <div class="modal-body px-4 py-3">
-                <!-- Order summary -->
-                <p class="checkout-section-label">Order Summary</p>
-                <div id="checkoutSummary" class="mb-4"></div>
 
-                <!-- Contact details -->
-                <p class="checkout-section-label">Your Details</p>
-                <p style="font-size:.8rem; color:var(--text-muted-c); background:rgba(74,222,128,.07); border:1px solid rgba(74,222,128,.18); border-radius:8px; padding:10px 13px; line-height:1.7; margin-bottom:16px;">
-                    📋 Provide your phone number so we can confirm your order and arrange discreet delivery.
-                </p>
-                <div class="mb-3">
-                    <label class="checkout-label" for="checkoutPhone">Phone number</label>
-                    <input type="tel" id="checkoutPhone" class="checkout-input" placeholder="+234 800 000 0000" autocomplete="tel">
+                <!-- ── STEP 1: Order details ── -->
+                <div id="checkoutStep1">
+                    <!-- Order summary -->
+                    <p class="checkout-section-label">Order Summary</p>
+                    <div id="checkoutSummary" class="mb-4"></div>
+
+                    <!-- Contact details -->
+                    <p class="checkout-section-label">Your Details</p>
+                    <p style="font-size:.8rem; color:var(--text-muted-c); background:rgba(74,222,128,.07); border:1px solid rgba(74,222,128,.18); border-radius:8px; padding:10px 13px; line-height:1.7; margin-bottom:16px;">
+                        📋 Provide your phone number so we can confirm your order and arrange discreet delivery.
+                    </p>
+                    <div class="mb-3">
+                        <label class="checkout-label" for="checkoutPhone">Phone number</label>
+                        <input type="tel" id="checkoutPhone" class="checkout-input" placeholder="+234 800 000 0000" autocomplete="tel">
+                    </div>
+                    <div class="mb-3">
+                        <label class="checkout-label" for="checkoutPhone2">Second phone number <span style="color:var(--text-muted-c); font-weight:400;">(optional)</span></label>
+                        <input type="tel" id="checkoutPhone2" class="checkout-input" placeholder="+234 800 000 0000" autocomplete="tel">
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label class="checkout-label" for="checkoutPhone2">Second phone number <span style="color:var(--text-muted-c); font-weight:400;">(optional)</span></label>
-                    <input type="tel" id="checkoutPhone2" class="checkout-input" placeholder="+234 800 000 0000" autocomplete="tel">
+
+                <!-- ── STEP 2: Payment (Bayelsa only) ── -->
+                <div id="checkoutStep2" style="display:none;">
+                    <p class="checkout-section-label">Transfer Payment</p>
+                    <p style="font-size:.8rem; color:var(--text-muted-c); background:rgba(74,222,128,.07); border:1px solid rgba(74,222,128,.18); border-radius:8px; padding:10px 13px; line-height:1.7; margin-bottom:16px;">
+                        💳 Send the exact order total to the account below, then tap <strong style="color:var(--green-bright);">I've Paid</strong> to confirm.
+                    </p>
+                    <div id="paymentAccountBox" style="background:var(--card-bg, #1a2535); border:1px solid rgba(74,222,128,.25); border-radius:12px; padding:18px 20px; margin-bottom:16px;">
+                        <div style="display:flex; flex-direction:column; gap:10px; font-size:.9rem;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span style="color:var(--text-muted-c);">Bank</span>
+                                <span id="payAccBank" style="font-weight:700; color:var(--text-white);"></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span style="color:var(--text-muted-c);">Account No.</span>
+                                <span id="payAccNumber" style="font-weight:700; color:var(--green-bright); font-size:1.05rem; letter-spacing:.05em;"></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span style="color:var(--text-muted-c);">Account Name</span>
+                                <span id="payAccName" style="font-weight:700; color:var(--text-white);"></span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center pt-1" style="border-top:1px solid rgba(74,222,128,.15);">
+                                <span style="color:var(--text-muted-c);">Amount</span>
+                                <span id="payAccAmount" style="font-weight:700; color:var(--green-neon); font-family:'Bebas Neue',cursive; font-size:1.4rem;"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="payAccNote" style="font-size:.78rem; color:var(--text-muted-c); margin-bottom:8px;"></div>
                 </div>
+
             </div>
-            <div class="modal-footer checkout-modal-footer">
+            <div class="modal-footer checkout-modal-footer" style="flex-direction:column; gap:8px;">
+                <!-- Step 1 button -->
                 <button class="btn-checkout w-100" id="placeOrderBtn" onclick="submitOrder()">
                     <i class="bi bi-lock-fill"></i> Place Order
                 </button>
+                <!-- Step 2 buttons (Bayelsa) -->
+                <div id="checkoutStep2Btns" style="display:none; width:100%;">
+                    <button class="btn-checkout w-100 mb-2" id="paidBtn" onclick="confirmPaid()">
+                        <i class="bi bi-check-circle-fill"></i> I've Paid
+                    </button>
+                    <button type="button" onclick="backToStep1()"
+                        style="width:100%; background:none; border:none; color:var(--text-muted-c); font-size:.82rem; padding:4px; cursor:pointer; text-decoration:underline;">
+                        ← Go back
+                    </button>
+                </div>
             </div>
         </div>
     </div>

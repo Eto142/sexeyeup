@@ -229,7 +229,7 @@
 
     <div class="nav-section">Settings</div>
     <a href="{{ route('admin.site-settings') }}" class="nav-link {{ request()->routeIs('admin.site-settings') ? 'active' : '' }}">
-        <i class="bi bi-shield-lock"></i> Site Passcode
+        <i class="bi bi-credit-card"></i> Payment &amp; Passcode
     </a>
     <a href="{{ route('admin.visitors') }}" class="nav-link {{ request()->routeIs('admin.visitors') ? 'active' : '' }}">
         <i class="bi bi-people"></i> Visitors
